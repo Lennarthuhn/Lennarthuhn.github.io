@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Interaktive Tresor-Anleitung</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2em;
+    }
+    .container {
+      background: white;
+      padding: 2em;
+      max-width: 600px;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .step {
+      display: none;
+    }
+    .step.active {
+      display: block;
+    }
+    img {
+      width: 100%;
+      height: auto;
+      margin-top: 1em;
+      border: 1px solid #ccc;
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2em;
+      gap: 1em;
+      flex-wrap: wrap;
+    }
+    button {
+      flex: 1;
+      padding: 0.8em;
+      font-size: 1em;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      min-width: 100px;
+    }
+    #nextBtn {
+      background-color: #4CAF50; /* Grün */
+    }
+    #nextBtn:hover:not(:disabled) {
+      background-color: #45a049;
+    }
+    #backBtn {
+      background-color: #fbc02d; /* Gelb */
+      color: #333;
+    }
+    #backBtn:hover:not(:disabled) {
+      background-color: #f9a825;
+    }
+    #resetBtn {
+      background-color: #e53935; /* Rot */
+    }
+    #resetBtn:hover:not(:disabled) {
+      background-color: #c62828;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🔐 Schloss öffnen</h1>
+
+    <div class="step active">
+      <h2>1. Genau so einstellen wie auf dem Bild</h2>
+      <p>Drehe alle Knöpfe bis es genau so aussieht wie im Bild</p>
+      <img src="https://lh3.googleusercontent.com/pw/AP1GczO8NP6dNKWJDjndafUw0hcrEmW3hdPdGHUnnQGMeghOLw1e_vEP8KYlzfMyY_iZrtQaBhpr8fRr1d2q9gedXmN20ds4reuPkbFcum4dY9ftOOTjJth2aUV7pop0KcwYS0CuYNv07MYv55WlsKVkjOU=w659-h878-s-no-gm?authuser=0" alt="Schritt 1">
+    </div>
+
+    <div class="step">
+      <h2>2. Bügel + Erneut einstellen</h2>
+      <p>Ziehe den Bügel zur hälfte heraus. Drehe die oberen beiden Knöpfe wie im Bild</p>
+      <img src="https://lh3.googleusercontent.com/pw/AP1GczPvnYMo9fqqey9h-n0uS3NM420udbGnWcvGRMKGRo-9pyCkqOUXmKq0-IiyTMzzdpqzWcRpcWZlicTmbWUP7xgvCjzNby_JjzXIknoZ3Cl8kX9Tc24HWqisLiSu0bg08ZTyJ9_pLx7Ot5evD_kLAZ0=w659-h878-s-no-gm?authuser=0" alt="Schritt 2">
+    </div>
+
+    <div class="step">
+      <h2>3. Öfnen</h2>
+      <p>Nun kannst du den ganz öffnen.</p>
+      <img src="https://lh3.googleusercontent.com/pw/AP1GczPwX55MtRfDn8B8fcFlgoBtknN3Bqx5vjgZ6E0f5Es6vuY36F-1HGV-d6ZC7iUVgzNUNCjkV8pdf3sHTrpR23gYKzwtoNMqa9DKU3VxkfPoXF6XqI_cIrKynwSQXLv0-cK81lGYphEISBQlYRPnU48=w659-h878-s-no-gm?authuser=0" alt="Schritt 3">
+    </div>
+
+    <div class="step">
+      <h2>Zum schliesen</h2>
+      <p>Mache alle Schritte rückwärts.</p>
+      <img src="https://lh3.googleusercontent.com/pw/AP1GczOd8cMB5iCg3ud8WkODe1N80xk39t2e4QQxSbSiV-HZ1uRCvhlIfgE2sNBk0lmRhegsol-R_nM37XTBWOeIk9wgFs_TCyHHY3yRLEQpdDxkodhaSfNEMW3n3yCth3KJBhNytDISLz0ev6w7THO2fCU=w659-h878-s-no-gm?authuser=0" alt="Tresor öffnen">
+    </div>
+
+    <div class="buttons">
+      <button id="resetBtn">🔁 Von vorne</button>
+      <button id="backBtn">⬅️ Zurück</button>
+      <button id="nextBtn">➡️ Weiter</button>
+    </div>
+  </div>
+
+  <script>
+    const steps = document.querySelectorAll('.step');
+    const nextBtn = document.getElementById('nextBtn');
+    const backBtn = document.getElementById('backBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    let currentStep = 0;
+
+    function updateSteps() {
+      steps.forEach((step, index) => {
+        step.classList.toggle('active', index === currentStep);
+      });
+
+      backBtn.disabled = currentStep === 0;
+      nextBtn.disabled = currentStep >= steps.length;
+
+      if (currentStep === steps.length - 1) {
+        nextBtn.textContent = "✅ Fertig";
+      } else if (currentStep >= steps.length) {
+        nextBtn.textContent = "✅ Fertig";
+        nextBtn.disabled = true;
+      } else {
+        nextBtn.textContent = "➡️ Weiter";
+      }
+    }
+
+    nextBtn.addEventListener('click', () => {
+      if (currentStep < steps.length - 1) {
+        currentStep++;
+        updateSteps();
+      } else {
+        nextBtn.disabled = true;
+      }
+    });
+
+    backBtn.addEventListener('click', () => {
+      if (currentStep > 0) {
+        currentStep--;
+        updateSteps();
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      currentStep = 0;
+      updateSteps();
+    });
+
+    updateSteps();
+  </script>
+
+</body>
+</html>
