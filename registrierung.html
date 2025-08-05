@@ -1,0 +1,1359 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MEGA REGISTRIERUNG 5000</title>
+    <style>
+                body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+        
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+        }
+        
+        h1 {
+            margin: 0 0 30px;
+            color: #333;
+            font-size: 24px;
+        }
+        
+        .timer {
+            font-size: 64px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+            font-weight: bold;
+        }
+        
+        .button:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .plus-button {
+            background: #10b981;
+        }
+        
+        .plus-button:hover {
+            background: #0d9488;
+        }
+        
+        .plus-button:disabled {
+            background: #ccc;
+        }
+        
+        .status {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        @keyframes blink {
+            0% { background-color: yellow; }
+            25% { background-color: pink; }
+            50% { background-color: cyan; }
+            75% { background-color: lime; }
+            100% { background-color: magenta; }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Comic Sans MS', cursive;
+            background: linear-gradient(45deg, red, orange, yellow, green, blue, indigo, violet);
+            background-size: 400% 400%;
+            animation: rainbow 8s ease infinite;
+            color: black;
+            overflow-x: hidden;
+            touch-action: manipulation;
+        }
+        
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 15px;
+            border: 10px solid black;
+            border-radius: 15px;
+            box-shadow: 0 0 20px red, 0 0 30px yellow, 0 0 40px green;
+            position: relative;
+            z-index: 1;
+            transform: scale(0.8);
+            transform-origin: top;
+            animation: shake 0.5s infinite;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            text-shadow: 5px 5px 0 black, -5px -5px 0 black, 5px -5px 0 black, -5px 5px 0 black;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            animation: blink 0.5s infinite;
+        }
+        
+        .timer {
+            text-align: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            color: red;
+            background-color: yellow;
+            padding: 10px;
+            border: 5px solid black;
+            margin-bottom: 20px;
+            animation: blink 0.2s infinite;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px 0 black;
+            font-size: 1.2em;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 5px solid black;
+            border-radius: 10px;
+            font-family: 'Comic Sans MS', cursive;
+            font-size: 1.2em;
+            background-color: pink;
+            color: purple;
+            font-weight: bold;
+        }
+        
+        .drag-area {
+            border: 8px dashed black;
+            padding: 20px;
+            text-align: center;
+            background-color: rgba(255, 255, 0, 0.5);
+            margin: 15px 0;
+            font-weight: bold;
+            color: red;
+        }
+        
+        .slider-container {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 30px;
+            background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+            border-radius: 15px;
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 40px;
+            height: 40px;
+            background: url('image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40"><circle cx="20" cy="20" r="18" fill="black" stroke="yellow" stroke-width="4"/><circle cx="20" cy="20" r="10" fill="red"/><circle cx="20" cy="20" r="5" fill="yellow"/></svg>');
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        
+        .emoji-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+            justify-content: center;
+        }
+        
+        .emoji-btn {
+            width: 50px;
+            height: 50px;
+            font-size: 2em;
+            border: 5px solid black;
+            border-radius: 10px;
+            background-color: white;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        
+        .emoji-btn:active {
+            transform: scale(1.2);
+        }
+        
+        button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, red, yellow, green, blue);
+            border: 8px solid black;
+            border-radius: 20px;
+            color: white;
+            font-family: 'Comic Sans MS', cursive;
+            font-size: 1.5em;
+            font-weight: bold;
+            text-shadow: 3px 3px 0 black;
+            cursor: pointer;
+            margin-top: 20px;
+            animation: spin 2s linear infinite;
+        }
+        
+        .warning {
+            background-color: orange;
+            color: red;
+            padding: 10px;
+            border: 5px solid black;
+            margin: 15px 0;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .captcha {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            text-shadow: 3px 3px 0 black;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 15px;
+        }
+        
+        .tilt-message {
+            position: fixed;
+            top: 20px;
+            left: 0;
+            right: 0;
+            background-color: red;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 1.5em;
+            font-weight: bold;
+            z-index: 1000;
+            display: none;
+            border: 5px solid black;
+        }
+        
+        .pop-up {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: yellow;
+            border: 10px solid red;
+            padding: 20px;
+            z-index: 100;
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            display: none;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.8);
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 8px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #7983ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+            display: none;
+        }
+        
+        /* New interactive elements */
+        .drawing-canvas {
+            border: 5px solid black;
+            margin: 15px 0;
+            background-color: white;
+            cursor: crosshair;
+        }
+        
+        .color-picker {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border: 3px solid black;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .memory-game {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .memory-card {
+            width: 100%;
+            height: 100px;
+            background-color: blue;
+            border: 5px solid black;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            color: white;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+        
+        .memory-card.flipped {
+            transform: rotateY(180deg);
+            background-color: yellow;
+        }
+        
+        .whack-a-mole {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 5px;
+            margin: 20px 0;
+        }
+        
+        .mole-hole {
+            width: 100%;
+            height: 80px;
+            background-color: brown;
+            border: 3px solid black;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .mole {
+            width: 60%;
+            height: 80%;
+            background-color: gray;
+            border-radius: 50% 50% 40% 40%;
+            position: absolute;
+            bottom: -100%;
+            left: 20%;
+            transition: bottom 0.3s;
+        }
+        
+        .tone-test {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .tone-btn {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 5px solid black;
+            margin: 10px;
+            font-size: 1.5em;
+            cursor: pointer;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 20px;
+            background-color: black;
+            margin: 10px 0;
+            border: 3px solid yellow;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, green, yellow, red);
+            transition: width 0.3s;
+        }
+        .password-input {
+            width: 100%;
+            padding: 15px;
+            font-size: 18px;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        
+        .criteria {
+            text-align: left;
+            margin: 25px 0;
+        }
+        
+        .criterion {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+        
+        .criterion.active {
+            opacity: 1;
+        }
+        
+        .criterion i {
+            margin-right: 10px;
+            font-size: 20px;
+            width: 25px;
+        }
+        
+        .criterion.pending {
+            color: #6c757d;
+        }
+        
+        .criterion.success {
+            background-color: #d4edda;
+            color: #155724;
+            border-left: 5px solid #28a745;
+        }
+        
+        .criterion.success i {
+            content: "✓";
+        }
+        
+        .result {
+            margin: 20px 0;
+            font-size: 18px;
+            font-weight: bold;
+            min-height: 25px;
+        }
+        
+        .celebration {
+            font-size: 40px;
+            animation: bounce 0.5s infinite alternate;
+            color: #ff6b6b;
+        }
+        
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+        
+        .emoji {
+            font-size: 24px;
+            margin: 0 5px;
+        }
+        
+        .hint {
+            font-size: 14px;
+            color: #6c757d;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        .level-indicator {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: #495057;
+        }
+        
+        .unlocked {
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+          #yearDisplay {
+        font-size: 24px;
+        margin: 20px 0;
+        }
+        
+        .drawing-canvas {
+            border: 5px solid black;
+            margin: 15px 0;
+            background-color: white;
+            cursor: crosshair;
+        }
+        
+        .color-picker {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border: 3px solid black;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        
+        .memory-game {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .memory-card {
+            width: 100%;
+            height: 100px;
+            background-color: blue;
+            border: 5px solid black;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            color: white;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.5s;
+        }
+        
+        .memory-card.flipped {
+            transform: rotateY(180deg);
+            background-color: yellow;
+        }
+          .slider-container { text-align: center; }
+  .slider { width: 300px; margin: 10px 0; }
+  output { font-size: 1.5em; display: block; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <div class="tilt-message" id="tiltMessage">BITTE HALTE DEIN GERÄT SENKRECHT!</div>
+    
+    <div class="container">
+        <h1>MEGA REGISTRIERUNG 5000</h1>
+        
+         <div class="container">
+        <h1>1-Minuten Timer</h1>
+        <div class="timer" id="timer">60</div>
+        <button id="plusButton" class="button plus-button" disabled>+1 Minute</button>
+        <div class="status" id="status">Timer läuft automatisch</div>
+    </div>
+        
+        <form id="registrationForm">
+            <div class="form-group">
+                <label>🎨 Zeichne dein Profil!</label>
+                <canvas id="drawingCanvas" width="370" height="200" class="drawing-canvas"></canvas>
+                <div class="color-picker">
+                    <div class="color-option" style="background-color: red;" onclick="setDrawColor('red')"></div>
+                    <div class="color-option" style="background-color: blue;" onclick="setDrawColor('blue')"></div>
+                    <div class="color-option" style="background-color: green;" onclick="setDrawColor('green')"></div>
+                    <div class="color-option" style="background-color: yellow;" onclick="setDrawColor('yellow')"></div>
+                </div>
+                <button type="button" onclick="clearCanvas()" style="width: 48%; display: inline-block;">Löschen</button>
+                <button type="button" onclick="shakeCanvas()" style="width: 48%; display: inline-block;">Schütteln!</button>
+            </div>
+            
+            <div class="form-group">
+                <label>🧠 Memory Spiel - Finde die Paare!</label>
+                <div class="memory-game" id="memoryGame">
+                    <div class="memory-card" data-symbol="🎉">?</div>
+                    <div class="memory-card" data-symbol="🚀">?</div>
+                    <div class="memory-card" data-symbol="🎉">?</div>
+                    <div class="memory-card" data-symbol="🚀">?</div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="memoryProgress"></div>
+                </div>
+            </div>
+            
+             <div class="container">
+        <h1>🔐 Passwort-Spiel 🎮</h1>
+        <p>Erstelle ein Passwort mit 7 lustigen Bedingungen - eine nach der anderen!</p>
+        
+        <div class="level-indicator" id="level">Level 1 von 7</div>
+        
+        <input type="text" id="password" class="password-input" placeholder="Gib dein Passwort ein...">
+        
+        <div class="criteria" id="criteria">
+            <div class="criterion active" id="length">
+                <i>🔸</i> <span>Muss mindestens 8 Zeichen lang sein</span>
+            </div>
+            <div class="criterion" id="animal">
+                <i>🔸</i> <span>Muss ein Tier enthalten (z.B. Katze, Hund, Pinguin)</span>
+            </div>
+            <div class="criterion" id="number">
+                <i>###</i> <span>Muss mindestens eine Zahl haben (0-9)</span>
+            </div>
+            <div class="criterion" id="emoji">
+                <i>😊</i> <span>Muss ein Emoji enthalten (😊, 🐱, 🍕, etc.)</span>
+            </div>
+            <div class="criterion" id="uppercase">
+                <i>Aa</i> <span>Muss mindestens einen Großbuchstaben haben</span>
+            </div>
+            <div class="criterion" id="food">
+                <i>🍕</i> <span>Muss ein Lebensmittel enthalten (Pizza, Keks, Banane)</span>
+            </div>
+            <div class="criterion" id="funny">
+                <i>🤪</i> <span>Muss ein lustiges Wort enthalten (Zwerg, Banane, Schnarchnase)</span>
+            </div>
+        </div>
+        
+        <div class="result" id="result"></div>
+        
+        <p class="hint" id="hint">Tipp: Beginne mit einem langen Passwort (mindestens 8 Zeichen)</p>
+    </div> 
+
+            <div class="form-group">
+                <label>🐹 Whack-a-Mole - Schlag die Mole!</label>
+                <div class="whack-a-mole" id="whackGame">
+                    <div class="mole-hole"><div class="mole">🐹</div></div>
+                    <div class="mole-hole"><div class="mole">🐹</div></div>
+                    <div class="mole-hole"><div class="mole">🐹</div></div>
+                    <div class="mole-hole"><div class="mole">🐹</div></div>
+                    <div class="mole-hole"><div class="mole">🐹</div></div>
+                    <div class="mole-hole"><div class="mole">🐹</div></div>
+                    <div class="mole-hole"><div class="mole">🐹</div></div>
+                    <div class="mole-hole"><div class="mole">🐹</div></div>
+                    <div class="mole-hole"><div class="mole">🐹</div></div>
+                </div>
+                <div>Mole geschlagen: <span id="moleScore">0</span>/10</div>
+            </div>
+            
+
+            
+            <div class="form-group">
+                <label>🎭 Emoji durch Schütteln auswählen</label>
+                <div style="text-align: center; font-size: 2em; margin: 10px 0;" id="shakeEmoji">❓</div>
+                <div class="warning">SCHÜTTEL DEIN GERÄT, UM EIN ZUFÄLLIGES EMOJI ZU ERHALTEN!</div>
+            </div>
+ </form>
+            <div class="container">
+  <h1>Finde dein Geburtsdatum!</h1>
+  <p id="yearDisplay">Jahr: </p>
+  <button onclick="userFeedback('higher')">Höher</button>
+  <button onclick="userFeedback('correct')">Korrekt</button>
+  <button onclick="userFeedback('lower')">Tiefer</button>
+</div>
+            <form id="registrationForm"></form>
+            <div class="form-group">
+                <label>🎯 Zielscheibe - Tippe auf die Mitte!</label>
+                <div style="width: 200px; height: 200px; background: radial-gradient(circle, red 0%, orange 20%, yellow 40%, green 60%, blue 80%, indigo 100%); border: 5px solid black; margin: 0 auto; position: relative;" id="target">
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 20px; height: 20px; background-color: white; border-radius: 50%;"></div>
+                </div>
+                <div style="text-align: center; margin-top: 10px;">
+                    Treffer: <span id="targetHits">0</span>/5
+                </div>
+            </div>
+            <div class="slider-container">
+  <label for="dateSlider">Wähle ein Datum:</label><br>
+  <input id="dateSlider" class="slider" type="range" min="1" max="365" value="1" step="1" oninput="updateDate(this.value)">
+  <output id="dateOutput">1. Januar</output>
+</div>
+            <button type="submit">REGISTRIEREN!!! 🔥</button>
+            
+            <div class="spinner" id="spinner"></div>
+        </form>
+    </div>
+    
+    <div class="pop-up" id="successPopup">
+        REGISTRIERUNG ERFOLGREICH! 🎉<br>
+        Willkommen im geocache, der Code ist <br>
+        <strong>1234</strong>
+    </div>
+    
+    <script>
+        // Timer
+        // Timer Variablen
+        window.alert("versucht euch zu registrieren! ich habe es etwas erschwert🤣, viel Spaß!");
+        let timeLeft = 60;
+        let timerInterval;
+        let plusButton = document.getElementById('plusButton');
+        let timerDisplay = document.getElementById('timer');
+        let statusDisplay = document.getElementById('status');
+        
+        // Funktion zum Aktualisieren der Anzeige
+        function updateDisplay() {
+            timerDisplay.textContent = timeLeft;
+            
+            // Prüfen, ob der +1 Minute Button aktiviert werden soll
+            if (timeLeft < 10) {
+                plusButton.disabled = false;
+            } else {
+                plusButton.disabled = true;
+            }
+        }
+        
+        // Funktion zum Hinzufügen einer Minute
+        function addMinute() {
+            timeLeft += 60;
+            updateDisplay();
+            statusDisplay.textContent = "+1 Minute hinzugefügt";
+            
+            // Button deaktivieren nach Klick
+            plusButton.disabled = true;
+            
+            // Status nach 2 Sekunden zurücksetzen
+            setTimeout(() => {
+                statusDisplay.textContent = "Timer läuft";
+            }, 2000);
+        }
+        
+        // Funktion zum Neuladen der Seite
+        function reloadPage() {
+            window.location.reload();
+        }
+        
+        // Timer starten
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                
+                updateDisplay();
+                
+                // Wenn Zeit abgelaufen
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    reloadPage();
+                }
+                
+                // Status aktualisieren
+                if (timeLeft < 10) {
+                    statusDisplay.textContent = `Achtung: ${timeLeft} Sekunden übrig!`;
+                } else {
+                    statusDisplay.textContent = `Timer läuft: ${timeLeft} Sekunden übrig`;
+                }
+            }, 1000);
+        }
+        
+        // Event Listener für den +1 Minute Button
+        plusButton.addEventListener('click', addMinute);
+        
+        // Timer beim Laden der Seite starten
+  
+        
+        // Drawing canvas
+        const canvas = document.getElementById('drawingCanvas');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let currentColor = 'black';
+        
+        function setDrawColor(color) {
+            currentColor = color;
+            document.querySelectorAll('.color-option').forEach(el => {
+                el.style.transform = 'scale(1)';
+            });
+            event.target.style.transform = 'scale(1.2)';
+        }
+        
+        function startDrawing(e) {
+            isDrawing = true;
+            draw(e);
+        }
+        
+        function stopDrawing() {
+            isDrawing = false;
+            ctx.beginPath();
+        }
+        
+        function draw(e) {
+            if (!isDrawing) return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            ctx.lineWidth = 5;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = currentColor;
+            
+            ctx.lineTo(x, y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+        }
+        
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            confettiEffect();
+        }
+        
+        function shakeCanvas() {
+            canvas.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                canvas.style.animation = '';
+            }, 500);
+            confettiEffect();
+        }
+        
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+        
+        // Touch events for mobile
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousedown', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            startDrawing(mouseEvent);
+        });
+        
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            const mouseEvent = new MouseEvent('mousemove', {
+                clientX: touch.clientX,
+                clientY: touch.clientY
+            });
+            draw(mouseEvent);
+        });
+        
+        canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            stopDrawing();
+        });
+        
+        // Memory game
+        const memoryCards = document.querySelectorAll('.memory-card');
+        let hasFlippedCard = false;
+        let lockBoard = false;
+        let firstCard, secondCard;
+        let cardsFlipped = 0;
+        
+        function flipCard() {
+            if (lockBoard) return;
+            if (this === firstCard) return;
+            
+            this.classList.add('flipped');
+            this.textContent = this.dataset.symbol;
+            
+            if (!hasFlippedCard) {
+                hasFlippedCard = true;
+                firstCard = this;
+                return;
+            }
+            
+            secondCard = this;
+            checkForMatch();
+        }
+        
+        function checkForMatch() {
+            let isMatch = firstCard.dataset.symbol === secondCard.dataset.symbol;
+            isMatch ? disableCards() : unflipCards();
+        }
+        
+        function disableCards() {
+            firstCard.removeEventListener('click', flipCard);
+            secondCard.removeEventListener('click', flipCard);
+            resetBoard();
+            cardsFlipped++;
+            updateMemoryProgress();
+            
+            if (cardsFlipped === 2) {
+                confettiEffect();
+            }
+        }
+        
+        function unflipCards() {
+            lockBoard = true;
+            setTimeout(() => {
+                firstCard.classList.remove('flipped');
+                firstCard.textContent = '?';
+                secondCard.classList.remove('flipped');
+                secondCard.textContent = '?';
+                resetBoard();
+            }, 1000);
+        }
+        
+        function resetBoard() {
+            [hasFlippedCard, lockBoard] = [false, false];
+            [firstCard, secondCard] = [null, null];
+        }
+        
+        function updateMemoryProgress() {
+            const progress = (cardsFlipped / 2) * 100;
+            document.getElementById('memoryProgress').style.width = `${progress}%`;
+        }
+        
+        memoryCards.forEach(card => card.addEventListener('click', flipCard));
+        
+        // Whack-a-mole game
+        const moleHoles = document.querySelectorAll('.mole-hole');
+        const moleElems = document.querySelectorAll('.mole');
+        let molesUp = [];
+        let moleInterval;
+        let moleScore = 0;
+        
+        function startMoleGame() {
+            moleInterval = setInterval(() => {
+                // Hide all moles
+                moleElems.forEach(mole => {
+                    mole.style.bottom = '-100%';
+                });
+                
+                // Show random moles
+                const numMoles = Math.floor(Math.random() * 3) + 1;
+                const holes = Array.from(moleHoles);
+                
+                for (let i = 0; i < numMoles; i++) {
+                    const randomHole = holes.splice(Math.floor(Math.random() * holes.length), 1)[0];
+                    const mole = randomHole.querySelector('.mole');
+                    mole.style.bottom = '10%';
+                }
+            }, 800);
+        }
+        
+        moleElems.forEach((mole, index) => {
+            mole.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (mole.style.bottom === '10%') {
+                    mole.style.bottom = '-100%';
+                    moleScore++;
+                    document.getElementById('moleScore').textContent = moleScore;
+                    
+                    // Visual feedback
+                    const hole = mole.parentElement;
+                    hole.style.backgroundColor = 'lightgreen';
+                    setTimeout(() => {
+                        hole.style.backgroundColor = 'brown';
+                    }, 200);
+                    
+                    if (moleScore >= 10) {
+                        clearInterval(moleInterval);
+                        confettiEffect();
+                    }
+                }
+            });
+        });
+        
+        startMoleGame();
+        
+
+        
+        
+        // Shake to get emoji
+        let lastX = 0, lastY = 0, lastZ = 0;
+        let shakeThreshold = 15;
+        const emojis = ['😀', '😎', '🚀', '🍕', '🎮', '🌈', '🌟', '🦄', '🌮', '🍻'];
+        
+        function handleOrientation(event) {
+            const x = Math.abs(event.beta);
+            const y = Math.abs(event.gamma);
+            const z = Math.abs(event.alpha);
+            
+            const deltaX = Math.abs(x - lastX);
+            const deltaY = Math.abs(y - lastY);
+            const deltaZ = Math.abs(z - lastZ);
+            
+            if (Math.max(deltaX, deltaY, deltaZ) > shakeThreshold) {
+                const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+                document.getElementById('shakeEmoji').textContent = randomEmoji;
+                confettiEffect();
+            }
+            
+            lastX = x;
+            lastY = y;
+            lastZ = z;
+        }
+        
+        // Target game
+        const target = document.getElementById('target');
+        let targetHits = 0;
+        
+        target.addEventListener('click', (e) => {
+            const rect = target.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const clickX = e.clientX;
+            const clickY = e.clientY;
+            
+            // Calculate distance from center
+            const distance = Math.sqrt(
+                Math.pow(clickX - centerX, 2) + Math.pow(clickY - centerY, 2)
+            );
+            
+            // Check if click was close enough to center
+            if (distance < 50) {
+                targetHits++;
+                document.getElementById('targetHits').textContent = targetHits;
+                
+                // Visual feedback
+                target.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    target.style.transform = 'scale(1)';
+                }, 200);
+                
+                if (targetHits >= 5) {
+                    confettiEffect();
+                }
+            } else {
+                // Miss feedback
+                target.style.backgroundColor = 'red';
+                setTimeout(() => {
+                    target.style.backgroundColor = '';
+                }, 200);
+            }
+        });
+        
+        // Check device orientation
+        function checkOrientation() {
+            const orientation = window.innerWidth > window.innerHeight ? 'landscape' : 'portrait';
+            const tiltMessage = document.getElementById('tiltMessage');
+            
+            if (orientation === 'landscape') {
+                tiltMessage.style.display = 'block';
+            } else {
+                tiltMessage.style.display = 'none';
+            }
+        }
+        
+        window.addEventListener('orientationchange', checkOrientation);
+        window.addEventListener('resize', checkOrientation);
+        checkOrientation();
+        
+        // Enable device orientation
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', handleOrientation, true);
+        }
+        
+        // Confetti effect
+        function confettiEffect() {
+            const confettiCount = 100;
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = getRandomColor();
+                confetti.style.left = Math.random() * window.innerWidth + 'px';
+                confetti.style.top = '-10px';
+                confetti.style.opacity = '1';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                confetti.style.zIndex = '1000';
+                document.body.appendChild(confetti);
+                
+                const animationDuration = Math.random() * 3 + 2;
+                const moveX = Math.random() * 200 - 100;
+                
+                confetti.animate([
+                    { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate(${moveX}px, ${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+                ], {
+                    duration: animationDuration * 1000,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.9, 0.1)'
+                });
+                
+                setTimeout(() => {
+                    confetti.remove();
+                }, animationDuration * 1000);
+            }
+        }
+        
+        function getRandomColor() {
+            const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'pink', 'cyan'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        // Form submission
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Check if games are completed
+            const memoryComplete = cardsFlipped === 2;
+            const moleComplete = moleScore >= 10;
+            const targetComplete = targetHits >= 5;
+            
+            if (!memoryComplete || !moleComplete || !targetComplete) {
+                alert('Bitte alle Spiele abschließen! Memory: ' + (memoryComplete ? '✅' : '❌') + 
+                      ', Whack-a-Mole: ' + (moleComplete ? '✅' : '❌') + 
+                      ', Zielscheibe: ' + (targetComplete ? '✅' : '❌'));
+                return;
+            }
+            
+            // Show loading spinner
+            document.getElementById('spinner').style.display = 'block';
+            document.querySelector('button[type="submit"]').style.display = 'none';
+            
+            // Simulate processing
+            setTimeout(() => {
+                document.getElementById('successPopup').style.display = 'block';
+                
+                // Add crazy animation to the whole page
+                document.body.style.animation = 'rainbow 2s linear infinite';
+                document.querySelectorAll('input, button, .container').forEach(el => {
+                    el.style.animation = 'shake 0.1s infinite';
+                });
+                
+                // Create fireworks
+                for (let i = 0; i < 30; i++) {
+                    setTimeout(confettiEffect, i * 150);
+                }
+            }, 3000);
+        });
+        
+        // Initialize
+        window.onload = function() {
+            updateDisplay();
+            startTimer();
+            // Make everything blink randomly
+            setInterval(() => {
+                document.querySelector('.container').style.outline = `5px solid ${getRandomColor()}`;
+            }, 500);
+            
+            // Annoying pop-up after 10 seconds
+            setTimeout(() => {
+                const popUp = document.createElement('div');
+                popUp.style.position = 'fixed';
+                popUp.style.top = Math.random() * (window.innerHeight - 100) + 'px';
+                popUp.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+                popUp.style.backgroundColor = 'yellow';
+                popUp.style.border = '5px solid red';
+                popUp.style.padding = '15px';
+                popUp.style.zIndex = '999';
+                popUp.style.fontFamily = "'Comic Sans MS', cursive";
+                popUp.style.fontSize = '1.2em';
+                popUp.style.fontWeight = 'bold';
+                popUp.textContent = 'WICHTIGE NACHRICHT! KLICK HIER!';
+                popUp.style.cursor = 'pointer';
+                popUp.style.borderRadius = '15px';
+                popUp.style.boxShadow = '0 0 20px rgba(255, 0, 0, 0.8)';
+                
+                popUp.addEventListener('click', () => {
+                    alert('HAHA! GESCHAFFT! Du hast auf den Pop-up geklickt! 😂');
+                    popUp.remove();
+                });
+                
+                document.body.appendChild(popUp);
+                
+                // Make it move around randomly
+                setInterval(() => {
+                    popUp.style.top = Math.random() * (window.innerHeight - 100) + 'px';
+                    popUp.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+                }, 3000);
+            }, 10000);
+            
+            // Initialize drawing with a random doodle
+            setTimeout(() => {
+                const colors = ['red', 'blue', 'green', 'yellow'];
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+                
+                for (let i = 0; i < 5; i++) {
+                    ctx.beginPath();
+                    ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+                    ctx.strokeStyle = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    for (let j = 0; j < 20; j++) {
+                        ctx.lineTo(
+                            Math.random() * canvas.width,
+                            Math.random() * canvas.height
+                        );
+                    }
+                    ctx.stroke();
+                }
+            }, 500);
+        };
+                const animals = ['katze', 'hund', 'pinguin', 'elefant', 'giraffe', 'affe', 'löwe', 'tiger', 'bär', 'fuchs'];
+        const foods = ['pizza', 'keks', 'banane', 'apfel', 'kuchen', 'schokolade', 'eis', 'wurst', 'käse', 'brot'];
+        const funnyWords = ['zwerg', 'schnarchnase', 'dummkopf', 'klapptüte', 'trottel', 'blödmann', 'dussel', 'schlaukopf', 'genie', 'held'];
+        const emojiss = ['😀', '😂', '😍', '😎', '🤩', '🥳', '🤣', '😜', '🤪', '😋', '🍕', '🍦', '🍩', '🍪', '🎂', '🐱', '🐶', '🐼', '🦄', '🐷', '🐸', '🐵', '🦊'];
+        
+        const passwordInput = document.getElementById('password');
+        const result = document.getElementById('result');
+        const levelIndicator = document.getElementById('level');
+        const hint = document.getElementById('hint');
+        
+        const criteria = {
+            length: document.getElementById('length'),
+            animal: document.getElementById('animal'),
+            number: document.getElementById('number'),
+            emoji: document.getElementById('emoji'),
+            uppercase: document.getElementById('uppercase'),
+            food: document.getElementById('food'),
+            funny: document.getElementById('funny')
+        };
+        
+        const hints = [
+            "Tipp: Beginne mit einem langen Passwort (mindestens 8 Zeichen)",
+            "Tipp: Füge ein Tier hinzu, wie Katze, Hund oder Pinguin",
+            "Tipp: Vergiss nicht, mindestens eine Zahl einzufügen (0-9)",
+            "Tipp: Mach es bunt mit einem Emoji wie 😊 oder 🍕",
+            "Tipp: Ein Großbuchstabe am Anfang macht es sicherer!",
+            "Tipp: Jeder liebt Essen - füge ein Lebensmittel hinzu",
+            "Tipp: Wer sagt, dass Passwörter nicht lustig sein können? Füge ein komisches Wort hinzu!"
+        ];
+        
+        function checkCriteria(password) {
+            const lowerPass = password.toLowerCase();
+            
+            return {
+                length: password.length >= 8,
+                animal: animals.some(animal => lowerPass.includes(animal)),
+                number: /\d/.test(password),
+                emoji: emojiss.some(emoji => password.includes(emoji)),
+                uppercase: /[A-Z]/.test(password),
+                food: foods.some(food => lowerPass.includes(food)),
+                funny: funnyWords.some(word => lowerPass.includes(word))
+            };
+        }
+        
+        function updateDisplayy(password) {
+            const checks = checkCriteria(password);
+            let completed = 0;
+            let nextLevel = 1;
+            
+            // Prüfe, wie viele Bedingungen erfüllt sind und entsperre die nächste
+            for (const [key, passed] of Object.entries(checks)) {
+                const criterion = criteria[key];
+                
+                if (passed) {
+                    criterion.className = 'criterion success unlocked';
+                    criterion.querySelector('i').textContent = '✅';
+                    completed++;
+                } else {
+                    // Nur aktive Kriterien können überprüft werden
+                    if (nextLevel <= completed + 1) {
+                        criterion.className = 'criterion active';
+                        if (nextLevel === completed + 1) {
+                            nextLevel = parseInt(key.replace(/\D/g, ''), 10) + 1;
+                        }
+                    } else {
+                        criterion.className = 'criterion';
+                    }
+                }
+            }
+            
+            // Aktualisiere Level-Anzeige
+            levelIndicator.textContent = `Level ${Math.min(completed + 1, 7)} von 7`;
+            
+            // Aktualisiere Hinweis
+            if (completed < 7) {
+                hint.textContent = hints[completed];
+            }
+            
+            if (completed === 7) {
+                result.innerHTML = '<span class="celebration">🎉 HURRA! Du hast alle 7 Level gemeistert! 🎉</span>';
+            } else {
+                result.textContent = `Fortgeschritten: ${completed} von 7 Bedingungen erfüllt`;
+            }
+        }
+        
+        passwordInput.addEventListener('input', function(e) {
+            updateDisplayy(e.target.value);
+        });
+        
+        // Initial display
+        updateDisplayy('');
+
+          let targetYear = Math.floor(Math.random() * 3001); // Zufälliges Jahr zwischen 0 und 3000
+  let currentGuess = Math.floor(Math.random() * 3001);
+  let guessRange = [0, 3000];
+
+  function updateDisplaay() {
+    document.getElementById('yearDisplay').textContent = `Jahr: ${currentGuess}`;
+  }
+
+  function userFeedback(feedback) {
+    if (feedback === 'higher') {
+      guessRange[0] = currentGuess + 1;
+    } else if (feedback === 'lower') {
+      guessRange[1] = currentGuess - 1;
+    } else if (feedback === 'correct') {
+      if (currentGuess < 1940 || currentGuess > 2023) {
+        alert('Unrealistisches Geburtsdatum! Starte neu.');
+        location.reload();
+      } else {
+        alert('Aufgabe geschafft! Das richtige Jahr war: ' + currentGuess);
+        
+      }
+      return;
+    }
+
+    currentGuess = Math.floor((guessRange[0] + guessRange[1]) / 2);
+    updateDisplaay();
+  }
+
+  updateDisplaay();
+  function updateDate(value) {
+  const dateOutput = document.getElementById('dateOutput');
+  
+  const date = new Date(2023, 0, value);
+  const monthNames = ["Januar", "Februar", "März", "April", "Mai", "Juni", 
+                      "Juli", "August", "September", "Oktober", "November", "Dezember"];
+  
+  const day = date.getDate();
+  const month = monthNames[date.getMonth()];
+  
+  dateOutput.textContent = `${day}. ${month}`;
+}
+
+updateDate(1); // Initialize display
+    </script>
+</body>
+</html>
