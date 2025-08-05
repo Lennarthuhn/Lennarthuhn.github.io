@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Interaktive Tresor-Anleitung</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f9f9f9;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2em;
+    }
+    .container {
+      background: white;
+      padding: 2em;
+      max-width: 600px;
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    .step {
+      display: none;
+    }
+    .step.active {
+      display: block;
+    }
+    img {
+      width: 100%;
+      height: auto;
+      margin-top: 1em;
+      border: 1px solid #ccc;
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2em;
+      gap: 1em;
+      flex-wrap: wrap;
+    }
+    button {
+      flex: 1;
+      padding: 0.8em;
+      font-size: 1em;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      min-width: 100px;
+    }
+    #nextBtn {
+      background-color: #4CAF50; /* Grün */
+    }
+    #nextBtn:hover:not(:disabled) {
+      background-color: #45a049;
+    }
+    #backBtn {
+      background-color: #fbc02d; /* Gelb */
+      color: #333;
+    }
+    #backBtn:hover:not(:disabled) {
+      background-color: #f9a825;
+    }
+    #resetBtn {
+      background-color: #e53935; /* Rot */
+    }
+    #resetBtn:hover:not(:disabled) {
+      background-color: #c62828;
+    }
+    button:disabled {
+      opacity: 0.6;
+      cursor: default;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 1em;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>🔐 Schloss öffnen</h1>
+
+    <div class="step active">
+      <h2>1. Drei Umdrehungen nach rechts bis <strong>2</strong></h2>
+      <p>Drehe den Knopf drei volle Runden nach rechts und stoppe beim dritten Mal bei der Zahl 2.</p>
+      <img src="https://lh3.googleusercontent.com/pw/AP1GczNGr23-hPDJm6oNGiBMGwJK1e9y855EfU4AwFHVv8KDT6fW2505RgHHU-Fmq7dKGu8lzgNyGb87sxNFNIMXZPSMqTMmojRUMp9nsEH0Fa6rIC8wc3OayhYFJMlEHy7GWQdlFWoiARrYnd9jyKQFxQkH=w831-h1108-s-no-gm?authuser=0" alt="Schritt 1">
+    </div>
+
+    <div class="step">
+      <h2>2. Eine Umdrehung nach links bis <strong>11</strong></h2>
+      <p>Drehe gegen den Uhrzeigersinn einmal über die 11 hinaus und dann erneut zurück zur 11.</p>
+      <img src="https://lh3.googleusercontent.com/pw/AP1GczPem621LJxLaBV6-AEkdFnoXIrnmCppDfa328CX37PWw6JdCjlfuHGzBjmKcTS5eEsl53OgdzNpYhWF5SEShC2miUrmAJCwXyUoGkszAd9plMQXiRAII9K-magPKLruQg38VlGHY8N9RfthebmLnb3Q=w831-h1108-s-no-gm?authuser=0" alt="Schritt 2">
+    </div>
+
+    <div class="step">
+      <h2>3. Nach rechts bis <strong>6</strong></h2>
+      <p>Jetzt wieder nach rechts direkt zur 6 drehen.</p>
+      <img src="https://lh3.googleusercontent.com/pw/AP1GczOYZoX4qxyLthQ6hzOCr9t8u3KtOneuWerWw9An0gn-CY3gstYAvLOCGvpe_omGwj-Z6NdxdFxZuCqo5N7wcSNdGvkfFu7vMwMp8GF6Ym75s2MYqZmhMy7AXAKMWmlaImAHe6oMQVs46W2qEzuIjs2h=w831-h1108-s-no-gm?authuser=0" alt="Schritt 3">
+    </div>
+
+    <div class="step">
+      <h2>4. Öffnen</h2>
+      <p>Nun kannst du den Tresorgriff drehen oder ziehen, um ihn zu öffnen.</p>
+      <img src="https://lh3.googleusercontent.com/pw/AP1GczNL7dKOwDbaOaQf-EJram8yWoM3T4W7MiJ8aDIq3sm6tzgk38VoqMwwzXydY3_N9cHe_7zaOOLwXl912NI3_xPrqjE0vHqNNbE3F2MyL3wdhu-hBDDk91N1bn_X0e9Qr-qw8gaA1XFiYQbjyKac57Ev=w831-h1108-s-no-gm?authuser=0" alt="Tresor öffnen">
+    </div>
+
+    <div class="buttons">
+      <button id="resetBtn">🔁 Von vorne</button>
+      <button id="backBtn">⬅️ Zurück</button>
+      <button id="nextBtn">➡️ Weiter</button>
+    </div>
+  </div>
+
+  <script>
+    const steps = document.querySelectorAll('.step');
+    const nextBtn = document.getElementById('nextBtn');
+    const backBtn = document.getElementById('backBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    let currentStep = 0;
+
+    function updateSteps() {
+      steps.forEach((step, index) => {
+        step.classList.toggle('active', index === currentStep);
+      });
+
+      backBtn.disabled = currentStep === 0;
+      nextBtn.disabled = currentStep >= steps.length;
+
+      if (currentStep === steps.length - 1) {
+        nextBtn.textContent = "✅ Fertig";
+      } else if (currentStep >= steps.length) {
+        nextBtn.textContent = "✅ Fertig";
+        nextBtn.disabled = true;
+      } else {
+        nextBtn.textContent = "➡️ Weiter";
+      }
+    }
+
+    nextBtn.addEventListener('click', () => {
+      if (currentStep < steps.length - 1) {
+        currentStep++;
+        updateSteps();
+      } else {
+        nextBtn.disabled = true;
+      }
+    });
+
+    backBtn.addEventListener('click', () => {
+      if (currentStep > 0) {
+        currentStep--;
+        updateSteps();
+      }
+    });
+
+    resetBtn.addEventListener('click', () => {
+      currentStep = 0;
+      updateSteps();
+    });
+
+    updateSteps();
+  </script>
+
+</body>
+</html>
