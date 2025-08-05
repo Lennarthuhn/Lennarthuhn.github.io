@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greif nach den Sternen</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --background: #1f2023;
+            --text-color: #ecf0f1;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            background: var(--background);
+            color: var(--text-color);
+            margin: 0;
+            padding: 1rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s ease;
+        }
+
+        .box:hover {
+            transform: translateY(-2px);
+        }
+
+        #code-display, #missing-tags-display {
+            border-radius: 12px;
+            padding: 1rem;
+            margin: 1rem 0;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+            color: white;
+            display: none;
+        }
+
+        #code-display {
+            background: linear-gradient(135deg, #27ae60 0%, #219a52 100%);
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+
+        #missing-tags-display {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.3);
+        }
+
+        button {
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--secondary);
+            color: var(--text-color);
+            font-size: 1rem;
+            width: 100%;
+            max-width: 300px;
+            margin: 1rem auto 0;
+            display: block;
+        }
+
+        button:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .highlight {
+            font-size: 1.2rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .missing-key {
+            display: inline-block;
+            padding: 0.4rem 0.8rem;
+            margin: 0.2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        iframe {
+            width: 100%;
+            height: 60vh;
+            border: none;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.6rem;
+            }
+
+            .highlight {
+                font-size: 1rem;
+            }
+
+            button {
+                font-size: 0.95rem;
+                padding: 0.9rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ Greif nach den Sternen</h1>
+
+        <div id="missing-tags-display"></div>
+        <div id="code-display"></div>
+
+        <button onclick="clearStorage()" id="clear-btn">🔁 Zurücksetzen</button>
+    </div>
+
+    <script>
+        const requiredTags = ["stern1", "stern2", "stern3"];
+        const finalCode = "2, 11, 6";
+
+        const processTag = () => {
+            const params = new URLSearchParams(window.location.search);
+            params.forEach((value, key) => {
+                if (requiredTags.includes(key)) {
+                    localStorage.setItem(key, value);
+                }
+            });
+            updateDisplay();
+        };
+
+        const updateDisplay = () => {
+            const hasAllTags = requiredTags.every(tag => localStorage.getItem(tag) !== null);
+            const codeDisplay = document.getElementById('code-display');
+            const missingTagsDisplay = document.getElementById('missing-tags-display');
+
+            if (hasAllTags) {
+                codeDisplay.style.display = 'block';
+                missingTagsDisplay.style.display = 'none';
+                codeDisplay.innerHTML = `
+                    <h3>🎉 Finalcode freigeschaltet!</h3>
+                    <div class="highlight">Der Öffnungscode ist: ${finalCode}</div>
+                    <iframe src="https://gcschloss.w3spaces.com/"></iframe>
+                `;
+            } else {
+                codeDisplay.style.display = 'none';
+                missingTagsDisplay.style.display = 'block';
+                missingTagsDisplay.innerHTML = `
+                    <h3>⚠️ Fehlende Sterne:</h3>
+                    ${requiredTags.map(tag => {
+                        const isPresent = localStorage.getItem(tag) !== null;
+                        return `<span class="missing-key">${tag}${isPresent ? ' ✅' : ''}</span>`;
+                    }).join(' ')}
+                    <p style="margin-top:1rem">Suche die fehlenden Sterne in der Umgebung!</p>
+                `;
+            }
+        };
+
+        const clearStorage = () => {
+            if (confirm('⚠️ Achtung! Wirklich alle gesammelten Sterne löschen?\n(Dies ist sinnvoll bei einem Neustart der Suche)')) {
+                localStorage.clear();
+                updateDisplay();
+                alert('Gesammelte Sterne wurden zurückgesetzt! Viel Erfolg bei der erneuten Suche!');
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', processTag);
+        window.addEventListener('popstate', processTag);
+    </script>
+</body>
+</html>
