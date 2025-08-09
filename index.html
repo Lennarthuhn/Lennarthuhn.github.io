@@ -289,12 +289,35 @@ document.addEventListener('DOMContentLoaded', function () {
         { role: "system", content: '"{"stern_cache_1":{"position":{"hoehe":"1.5m","spoiler_bild":"[Spoiler Bild]"},"oeffnungsmechanismus":{"schritt_1":"Sammle 3 sternenförmige NFC-Tags.","schritt_2":"Scanne diese mit deinem Smartphone.","schritt_3":"Das Scannen öffnet eine Webseite mit dem Code zum Tresor."},"was_ist_nfc":"NFC (Near Field Communication) ist eine Kurzstreckenkommunikationstechnologie, die es ermöglicht, Geräte in der Nähe voneinander zu verbinden. Aktivierung: Android - Gehe in die Einstellungen, wähle "Verbindung" oder "NFC", schalte NFC ein. iOS - Gehe in die Wallet-App, aktiviere die Option für NFC-Scans.","wie_scannen":"Halte dein Smartphone nah an das NFC-Tag und warte auf eine Bestätigung auf dem Display.","oeffnen_des_schlosses":"Drehsequenz: Rechts, Links, Rechts. Sei dabei sehr genau!","schließen_des_schlosses":"Drücke einfach die Klappe wieder zu. Falls sie schräg sitzt, öffne sie erneut und passe die Position an.","alternative_problemlösung":"Falls etwas nicht funktioniert, wiederhole die oben genannten Schritte sorgfältig."},"stern_cache_2":{"position":{"hoehe":"1.5m","spoiler_bild":"[Spoiler Bild]"},"stromversorgung":"Verbinde das Lieferkabel mit einer Powerbank. Falls keine Powerbank verfügbar, nutze Adapter für dein Smartphone im Cache.","wlan_verbindung":"Verbinde dein Smartphone mit dem Netzwerk "Geocache Kamera". Kein Passwort erforderlich.","anmelden_im_netzwerk":"Falls die Verbindung nicht automatisch hergestellt wird, schalte mobile Daten aus und öffne die Webseite: 192.168.4.1.","selfie_aufnehmen":"Mache ein Foto von dir selbst oder deiner Hand.","code_erhalten":"Nach dem Fotoerstellen erhältst du den Code.","andenken_speichern":"Lade das heruntergeladene Foto auf dein Profil hoch und behalte es als Erinnerung."}}"' }
     ];
 
+    // Funktion zur Formatierung der Ausgabe
+    function formatForHtml(text) {
+        // Ersetze \n mit <br> für Zeilenumbrüche
+        let formattedText = text.replace(/\n/g, '<br>');
+
+        // Markiere spezifische Wörter fett (z.B. "Test", "Mistral")
+        let wordsToBold = ["Test", "Mistral", "fett"];
+        wordsToBold.forEach(word => {
+            let regex = new RegExp(`\\b${word}\\b`, 'gi'); // \\b sorgt für Wortgrenzen
+            formattedText = formattedText.replace(regex, `<strong>${word}</strong>`);
+        });
+
+        return formattedText;
+    }
+
     // Nachricht zum Chat hinzufügen
     function addMessage(role, content) {
         const messageDiv = document.createElement('div');
         messageDiv.classList.add('message');
         messageDiv.classList.add(role === 'user' ? 'user-message' : 'bot-message');
-        messageDiv.textContent = content;
+
+        // Wenn die Nachricht vom Bot kommt, formatiere sie
+        if (role === 'assistant') {
+            content = formatForHtml(content);
+            messageDiv.innerHTML = content; // Verwende innerHTML für HTML-Inhalte
+        } else {
+            messageDiv.textContent = content; // Für Benutzer-Nachrichten nutze plain Text
+        }
+
         chatBox.insertBefore(messageDiv, typingIndicator);
         chatBox.scrollTop = chatBox.scrollHeight;
 
@@ -308,15 +331,15 @@ document.addEventListener('DOMContentLoaded', function () {
         chatBox.scrollTop = chatBox.scrollHeight;
 
         try {
-const response = await fetch("https://lennarthuhn-github-io.vercel.app/api/mistral-proxy", {
-    method: "POST",
-    headers: {
-        "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-        messages: chatHistory,
-    }),
-});
+            const response = await fetch("https://lennarthuhn-github-io.vercel.app/api/mistral-proxy", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    messages: chatHistory,
+                }),
+            });
 
             const data = await response.json();
 
@@ -350,7 +373,6 @@ const response = await fetch("https://lennarthuhn-github-io.vercel.app/api/mistr
             sendButton.click();
         }
     });
-    
 
     // Begrüßungsnachricht
     addMessage('assistant', 'Hallo! Wie kann ich Ihnen helfen?');
