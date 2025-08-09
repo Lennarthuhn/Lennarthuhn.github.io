@@ -56,4 +56,5 @@ export default async function handler(req, res) {
         console.error('Fehler beim Aufruf der Mistral-API:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
+    console.log('Using API Key:', apiKey.substring(0, 5) + '...'); // Log only the first few characters for debugging
 }
