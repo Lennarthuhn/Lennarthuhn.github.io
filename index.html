@@ -330,7 +330,10 @@ function formatForHtml(text) {
     formattedText = formattedText.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
 
     // 5. Titel (### Titel) in <h3> umwandeln
-formattedText = formattedText.replace(/^###\s+(.+)$/gm, '<h3>$1</h3>');
+    formattedText = formattedText.replace(/^###\s+(.+)$/gm, (match, title) => {
+        // Ersetze die komplette Zeile durch ein <h3>-Tag
+        return `<h3>${title}</h3>`;
+    });
 
     // Rückgabe des formatierten Textes
     return formattedText;
