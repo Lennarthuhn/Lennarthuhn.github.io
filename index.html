@@ -248,7 +248,18 @@
   <!-- Weitere Geocache-Fragen hier einfügen -->
 
 </div>
-
+    <div class="chat-container">
+        <h1>Geocaching Chat</h1>
+        <div class="api-status">gc12345 Rätsel</div>
+        <div class="chat-box" id="chatBox">
+            <div class="typing-indicator" id="typingIndicator">Ki schreibt...</div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Schreibe deine Nachricht..." autocomplete="off">
+            <button id="sendButton">Senden</button>
+        </div>
+        <button class="clear-chat" id="clearChat">Chat leeren</button>
+    </div>
 <script>
   // Toggle main questions
   document.querySelectorAll('.question').forEach(question => {
@@ -265,6 +276,100 @@
       subParent.classList.toggle('open');
     });
   });
+
+          document.addEventListener('DOMContentLoaded', function() {
+            const chatBox = document.getElementById('chatBox');
+            const userInput = document.getElementById('userInput');
+            const sendButton = document.getElementById('sendButton');
+            const typingIndicator = document.getElementById('typingIndicator');
+            const clearChatButton = document.getElementById('clearChat');
+
+            // Fester API-Key (Im echten Einsatz sollte dieser serverseitig oder über eine sichere Methode verwaltet werden)
+            const MISTRAL_API_KEY =  process.env.MISTRAL_API_KEY; // Ersetzen Sie dies mit Ihrem echten API-Key
+
+            // Chat-Verlauf speichern
+            let chatHistory = [
+                { role: "system", content: "Du bist Teil eines Geocaches du sollst mit dem Benutzer reden, kleine , sehr einfache geocachingRätsel stellen, halte eine spannede konversation und nach ungefähr 5 nachrichten den code: 1234 zum öfnen des Geocaches bekannt geben. Antworte auf Deutsch." }
+            ];
+
+            // Nachricht zum Chat hinzufügen
+            function addMessage(role, content) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(role === 'user' ? 'user-message' : 'bot-message');
+                messageDiv.textContent = content;
+                chatBox.insertBefore(messageDiv, typingIndicator);
+                chatBox.scrollTop = chatBox.scrollHeight;
+                
+                // Zum Chat-Verlauf hinzufügen
+                chatHistory.push({ role: role, content: content });
+            }
+
+            // Nachricht an Mistral API senden
+            async function sendToMistral(message) {
+                typingIndicator.style.display = 'block';
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                try {
+                    const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${MISTRAL_API_KEY}`,
+                        },
+                        body: JSON.stringify({
+                            model: "mistral-large-latest",
+                            messages: chatHistory,
+                            max_tokens: 1000,
+                            temperature: 0.7,
+                        }),
+                    });
+
+                    const data = await response.json();
+
+                    if (data.choices && data.choices.length > 0) {
+                        const botResponse = data.choices[0].message.content.trim();
+                        addMessage('assistant', botResponse);
+                    } else {
+                        addMessage('assistant', "Entschuldigung, ich konnte keine Antwort generieren.");
+                    }
+                } catch (error) {
+                    console.error('Fehler bei der API-Anfrage:', error);
+                    addMessage('assistant', "Es gab einen Fehler bei der Verbindung zur Mistral API.");
+                } finally {
+                    typingIndicator.style.display = 'none';
+                }
+            }
+
+            // Event-Listener für Senden-Button
+            sendButton.addEventListener('click', function() {
+                const message = userInput.value.trim();
+                if (message) {
+                    addMessage('user', message);
+                    userInput.value = '';
+                    sendToMistral(message);
+                }
+            });
+
+            // Event-Listener für Enter-Taste
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendButton.click();
+                }
+            });
+
+            // Event-Listener für Chat leeren
+            clearChatButton.addEventListener('click', function() {
+                chatBox.innerHTML = '<div class="typing-indicator" id="typingIndicator">Mistral schreibt...</div>';
+                chatHistory = [
+                    { role: "system", content: "Du bist ein hilfreicher Assistent. Antworte auf Deutsch." }
+                ];
+                addMessage('assistant', 'Hallo! Wie kann ich Ihnen helfen?');
+            });
+
+            // Begrüßungsnachricht
+            addMessage('assistant', 'Hallo! Wie kann ich Ihnen helfen?');
+        });
 </script>
 
 </body>
