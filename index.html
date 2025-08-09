@@ -191,21 +191,7 @@ ul {
     padding-left: 20px;
 }
 
-/* Nachrichten-Design */
-.message {
-    margin: 5px;
-    padding: 10px;
-    border-radius: 5px;
-    word-break: break-word;
-}
-.user-message {
-    background-color: #ddf;
-    text-align: right;
-}
-.bot-message {
-    background-color: #dfd;
-    text-align: left;
-}
+
 </style>
 </head>
 <body>
@@ -342,6 +328,12 @@ function formatForHtml(text) {
 
     // 4. Hervorhebungen ([text](link)) in <a href="link">text</a> umwandeln
     formattedText = formattedText.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
+
+    // 5. Titel (### Titel) in <h3> umwandeln
+    formattedText = formattedText.replace(/(#{1,6})\s+(.+)/g, function (match, hashes, title) {
+        const level = hashes.length; // Anzahl der # bestimmt die Überschriftsebene
+        return `<h${level}>${title}</h${level}>`;
+    });
 
     // Rückgabe des formatierten Textes
     return formattedText;
