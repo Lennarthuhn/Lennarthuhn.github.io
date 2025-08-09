@@ -166,6 +166,46 @@
         .clear-chat:hover {
             background-color: #c82333;
         }
+        /* Fetter Text */
+strong {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Markierungen */
+mark {
+    background-color: yellow;
+    padding: 2px;
+    border-radius: 2px;
+}
+
+/* Kursiv-Hervorhebungen */
+em {
+    font-style: italic;
+    color: #666;
+}
+
+/* Aufzählungen */
+ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+/* Nachrichten-Design */
+.message {
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    word-break: break-word;
+}
+.user-message {
+    background-color: #ddf;
+    text-align: right;
+}
+.bot-message {
+    background-color: #dfd;
+    text-align: left;
+}
 </style>
 </head>
 <body>
@@ -290,19 +330,22 @@ document.addEventListener('DOMContentLoaded', function () {
     ];
 
     // Funktion zur Formatierung der Ausgabe
-    function formatForHtml(text) {
-        // Ersetze \n mit <br> für Zeilenumbrüche
-        let formattedText = text.replace(/\n/g, '<br>');
+function formatForHtml(text) {
+    // 1. Zeilenumbrüche in <br> umwandeln
+    let formattedText = text.replace(/\n/g, '<br>');
 
-        // Markiere spezifische Wörter fett (z.B. "Test", "Mistral")
-        let wordsToBold = ["Test", "Mistral", "fett"];
-        wordsToBold.forEach(word => {
-            let regex = new RegExp(`\\b${word}\\b`, 'gi'); // \\b sorgt für Wortgrenzen
-            formattedText = formattedText.replace(regex, `<strong>${word}</strong>`);
-        });
+    // 2. Aufzählungen (z.B. "1.", "90.") in <ol> und <li> umwandeln
+    formattedText = formattedText.replace(/(\d+)\.\s(.+)/g, '<ol><li>$2</li></ol>');
 
-        return formattedText;
-    }
+    // 3. Fetter Text (**fett**) in <strong> umwandeln
+    formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+    // 4. Hervorhebungen ([text](link)) in <a href="link">text</a> umwandeln
+    formattedText = formattedText.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
+
+    // Rückgabe des formatierten Textes
+    return formattedText;
+}
 
     // Nachricht zum Chat hinzufügen
     function addMessage(role, content) {
