@@ -317,24 +317,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Funktion zur Formatierung der Ausgabe
 function formatForHtml(text) {
-    // 1. Zeilenumbrüche in <br> umwandeln
-formattedText = formattedText.replace(/###\s+(.+?)(?=\n|$)/g, '<h2>$1</h2>');
-
+    // Zuerst: Variable deklarieren
     let formattedText = text.replace(/\n/g, '<br>');
 
-    // 2. Aufzählungen (z.B. "1.", "90.") in <ol> und <li> umwandeln
+    // Dann: Übrige Ersetzungen
+    formattedText = formattedText.replace(/###\s+(.+?)(?=\n|$)/g, '<h2>$1</h2>');
     formattedText = formattedText.replace(/(\d+)\.\s(.+)/g, '<ol><li>$2</li></ol>');
-
-    // 3. Fetter Text (**fett**) in <strong> umwandeln
     formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-    // 4. Hervorhebungen ([text](link)) in <a href="link">text</a> umwandeln
     formattedText = formattedText.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
 
-    // 5. Titel (### Titel) in <h3> umwandeln
-
-
-    // Rückgabe des formatierten Textes
     return formattedText;
 }
 
