@@ -838,6 +838,43 @@
     </div>
   </div>
   
+  <div class="faq-item">
+    <div class="question">Tetris Cache</div>
+    <div class="answer">
+        <div class="sub-faq-item">
+            <div class="sub-question">3.1 Wo ist der Cache?</div>
+            <div class="sub-answer">Der Tetris Cache befindet sich in einer Höhe von etwa 1,5 m an einem stabilen Baum. [Spoiler Bild]</div>
+        </div>
+        <div class="sub-faq-item">
+            <div class="sub-question">3.2 Wie beginne ich: Stromversorgung herstellen</div>
+            <div class="sub-answer">Schließe deine Powerbank oder dein Smartphone mit dem beiliegenden Adapter an das Gerät an, um es zu aktivieren.</div>
+        </div>
+        <div class="sub-faq-item">
+            <div class="sub-question">3.3 Wie spiele ich Tetris?</div>
+            <div class="sub-answer">
+                Die Steuerung erfolgt über drei Knöpfe:
+                <ul>
+                    <li><strong>Oben</strong> = Block nach <strong>links</strong></li>
+                    <li><strong>Mitte</strong> = Block nach <strong>rechts</strong></li>
+                    <li><strong>Unten</strong> = Block <strong>drehen</strong></li>
+                </ul>
+                Achte darauf, die Blöcke geschickt zu platzieren, um vollständige Linien zu bilden.
+            </div>
+        </div>
+        <div class="sub-faq-item">
+            <div class="sub-question">3.4 Was ist Tetris?</div>
+            <div class="sub-answer">Tetris ist ein klassisches Puzzlespiel aus dem Jahr 1984. Spielsteine unterschiedlicher Form (Tetrominos) fallen nach unten, und das Ziel ist es, vollständige horizontale Linien ohne Lücken zu füllen. Sobald eine Linie voll ist, verschwindet sie, und du erhältst Punkte.</div>
+        </div>
+        <div class="sub-faq-item">
+            <div class="sub-question">3.5 Ziel: Linien abschließen</div>
+            <div class="sub-answer">Du musst <strong>4 vollständige Linien</strong> abschließen, um den Code freizuschalten. Jede vollständige Linie wird automatisch entfernt – platziere die Blöcke also strategisch!</div>
+        </div>
+        <div class="sub-faq-item">
+            <div class="sub-question">3.6 Wie öffne ich das Schloss?</div>
+            <div class="sub-answer">Nachdem du 4 Linien abgeschlossen hast, wird ein numerischer Code angezeigt. Gib diesen Code auf dem Zahlenschloss des Caches ein, um ihn zu öffnen.</div>
+        </div>
+    </div>
+</div>
   <!-- Weitere Geocache-Fragen hier einfügen -->
 
 </div>
@@ -878,10 +915,59 @@ document.addEventListener('DOMContentLoaded', function () {
     const clearChatButton = document.getElementById('clearChat');
 
     // Chat-Verlauf speichern
-    let chatHistory = [
-        { role: "system", content: '"{"stern_cache_1":{"position":{"hoehe":"1.5m","spoiler_bild":"[Spoiler Bild]"},"oeffnungsmechanismus":{"schritt_1":"Sammle 3 sternenförmige NFC-Tags.","schritt_2":"Scanne diese mit deinem Smartphone.","schritt_3":"Das Scannen öffnet eine Webseite mit dem Code zum Tresor."},"was_ist_nfc":"NFC (Near Field Communication) ist eine Kurzstreckenkommunikationstechnologie, die es ermöglicht, Geräte in der Nähe voneinander zu verbinden. Aktivierung: Android - Gehe in die Einstellungen, wähle "Verbindung" oder "NFC", schalte NFC ein. iOS - Gehe in die Wallet-App, aktiviere die Option für NFC-Scans.","wie_scannen":"Halte dein Smartphone nah an das NFC-Tag und warte auf eine Bestätigung auf dem Display.","oeffnen_des_schlosses":"Drehsequenz: Rechts, Links, Rechts. Sei dabei sehr genau!","schließen_des_schlosses":"Drücke einfach die Klappe wieder zu. Falls sie schräg sitzt, öffne sie erneut und passe die Position an.","alternative_problemlösung":"Falls etwas nicht funktioniert, wiederhole die oben genannten Schritte sorgfältig."},"stern_cache_2":{"position":{"hoehe":"1.5m","spoiler_bild":"[Spoiler Bild]"},"stromversorgung":"Verbinde das Lieferkabel mit einer Powerbank. Falls keine Powerbank verfügbar, nutze Adapter für dein Smartphone im Cache.","wlan_verbindung":"Verbinde dein Smartphone mit dem Netzwerk "Geocache Kamera". Kein Passwort erforderlich.","anmelden_im_netzwerk":"Falls die Verbindung nicht automatisch hergestellt wird, schalte mobile Daten aus und öffne die Webseite: 192.168.4.1.","selfie_aufnehmen":"Mache ein Foto von dir selbst oder deiner Hand.","code_erhalten":"Nach dem Fotoerstellen erhältst du den Code.","andenken_speichern":"Lade das heruntergeladene Foto auf dein Profil hoch und behalte es als Erinnerung."}}"' }
-    ];
-
+let chatHistory = [
+    { 
+      role: "system", 
+      content: `
+        {
+          "stern_cache_1": {
+            "position": {
+              "hoehe": "1.5m",
+              "spoiler_bild": "[Spoiler Bild]"
+            },
+            "oeffnungsmechanismus": {
+              "schritt_1": "Sammle 3 sternenförmige NFC-Tags.",
+              "schritt_2": "Scanne diese mit deinem Smartphone.",
+              "schritt_3": "Das Scannen öffnet eine Webseite mit dem Code zum Tresor."
+            },
+            "was_ist_nfc": "NFC (Near Field Communication) ist eine Kurzstreckenkommunikationstechnologie, die es ermöglicht, Geräte in der Nähe voneinander zu verbinden. Aktivierung: Android - Gehe in die Einstellungen, wähle 'Verbindung' oder 'NFC', schalte NFC ein. iOS - Gehe in die Wallet-App, aktiviere die Option für NFC-Scans.",
+            "wie_scannen": "Halte dein Smartphone nah an das NFC-Tag und warte auf eine Bestätigung auf dem Display.",
+            "oeffnen_des_schlosses": "Drehsequenz: Rechts, Links, Rechts. Sei dabei sehr genau!",
+            "schließen_des_schlosses": "Drücke einfach die Klappe wieder zu. Falls sie schräg sitzt, öffne sie erneut und passe die Position an.",
+            "alternative_problemlösung": "Falls etwas nicht funktioniert, wiederhole die oben genannten Schritte sorgfältig."
+          },
+          "kamera_cache_2": {
+            "position": {
+              "hoehe": "1.5m",
+              "spoiler_bild": "[Spoiler Bild]"
+            },
+            "stromversorgung": "Verbinde das Lieferkabel mit einer Powerbank. Falls keine Powerbank verfügbar, nutze Adapter für dein Smartphone im Cache.",
+            "wlan_verbindung": "Verbinde dein Smartphone mit dem Netzwerk 'Geocache Kamera'. Kein Passwort erforderlich.",
+            "anmelden_im_netzwerk": "Falls die Verbindung nicht automatisch hergestellt wird, schalte mobile Daten aus und öffne die Webseite: 192.168.4.1.",
+            "selfie_aufnehmen": "Mache ein Foto von dir selbst oder deiner Hand.",
+            "code_erhalten": "Nach dem Fotoerstellen erhältst du den Code.",
+            "andenken_speichern": "Lade das heruntergeladene Foto auf dein Profil hoch und behalte es als Erinnerung."
+          },
+          "tetris_cache_3": {
+            "position": {
+              "hoehe": "1.5m",
+              "spoiler_bild": "[Spoiler Bild]"
+            },
+            "stromversorgung": "Schließe deine Powerbank oder dein Smartphone mit dem beiliegenden Adapter an, um das Gerät zu aktivieren.",
+            "spielsteuerung": {
+              "knopf_oben": "Bewegt den Block nach links",
+              "knopf_mitte": "Bewegt den Block nach rechts",
+              "knopf_unten": "Dreht den Block"
+            },
+            "was_ist_tetris": "Tetris ist ein klassisches Puzzlespiel, bei dem verschiedene Formen (Tetrominos) nach unten fallen. Ziel ist es, vollständige horizontale Linien zu bilden, die dann verschwinden.",
+            "ziel": "Du musst 4 vollständige Linien abschließen, um den Code freizuschalten.",
+            "code_erhalten": "Nachdem 4 Linien erfolgreich abgeschlossen wurden, wird ein numerischer Code angezeigt.",
+            "schloss_oeffnen": "Gib den erhaltenen Code auf dem Zahlenschloss des Caches ein, um ihn zu öffnen."
+          }
+        }
+      `
+    }
+];
     // Funktion zur Formatierung der Ausgabe
 function formatForHtml(text) {
     // Zuerst: Variable deklarieren
