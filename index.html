@@ -276,7 +276,7 @@ ul {
 </div>
     <div class="chat-container">
         <h1>Geocaching Chat</h1>
-        <div class="api-status">gc12345 Rätsel</div>
+        <div class="api-status">KI Hilfe</div>
         <div class="chat-box" id="chatBox">
             <div class="typing-indicator" id="typingIndicator">Ki schreibt...</div>
         </div>
@@ -318,10 +318,11 @@ document.addEventListener('DOMContentLoaded', function () {
     // Funktion zur Formatierung der Ausgabe
 function formatForHtml(text) {
     // Zuerst: Variable deklarieren
-    let formattedText = text.replace(/\n/g, '<br>');
+    let formattedText = text.replace(/###\s+(.+?)(?=\n|$)/g, '<h2>$1</h2>');
+    formattedText = formattedText.replace(/\n/g, '<br>');
 
     // Dann: Übrige Ersetzungen
-    formattedText = formattedText.replace(/###\s+(.+?)(?=\n|$)/g, '<h2>$1</h2>');
+    
     formattedText = formattedText.replace(/(\d+)\.\s(.+)/g, '<ol><li>$2</li></ol>');
     formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     formattedText = formattedText.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
