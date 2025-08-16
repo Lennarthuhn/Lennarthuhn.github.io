@@ -1,0 +1,7 @@
+{
+  "typ": "geocache",
+  "status": "gefunden",
+  "nachricht": "Gratulation! Du hast den Geocache gefunden.",
+  "hinweis": "Zum Öffnen entschlüssele mit Base64 das Passwort. Dafür kannst du einmal deine tolle App benutzen.",
+  "passwort_b64": "V2VsdGNoYWxsISBUaHVuIGR1IGdhbnplIE1haCE="
+}
