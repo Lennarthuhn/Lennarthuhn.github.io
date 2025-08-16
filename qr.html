@@ -1,7 +1,128 @@
-{
-  "typ": "geocache",
-  "status": "gefunden",
-  "nachricht": "Gratulation! Du hast den Geocache gefunden.",
-  "hinweis": "Zum Öffnen entschlüssele mit Base64 das Passwort. Dafür kannst du einmal deine tolle App benutzen.",
-  "passwort_b64": "V2VsdGNoYWxsISBUaHVuIGR1IGdhbnplIE1haCE="
-}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Geocache gefunden!</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #2c5530, #4a7c59);
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 25px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    h1 {
+      margin: 0 0 15px 0;
+      font-size: 1.8rem;
+      color: #fff;
+    }
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+    .hint {
+      background: rgba(255, 255, 0, 0.2);
+      border: 1px dashed #ffeb3b;
+      padding: 12px;
+      border-radius: 10px;
+      margin: 15px 0;
+      font-style: italic;
+    }
+    .password-box {
+      margin: 20px 0;
+    }
+    .password {
+      font-family: 'Courier New', monospace;
+      font-size: 1.1rem;
+      background: #000;
+      color: #0f0;
+      padding: 10px;
+      border-radius: 8px;
+      margin: 10px 0;
+      word-break: break-all;
+    }
+    button {
+      background: #ffeb3b;
+      color: #222;
+      border: none;
+      padding: 12px 20px;
+      font-size: 1.1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s;
+      margin: 10px 5px;
+      display: block;
+      width: calc(100% - 24px);
+    }
+    button:hover {
+      background: #fdd835;
+    }
+    .btn-help {
+      background: #4caf50;
+      color: white;
+    }
+    .btn-help:hover {
+      background: #43a047;
+    }
+    .success {
+      color: #b2fab4;
+      font-weight: bold;
+      margin-top: 15px;
+      opacity: 0;
+      transition: opacity 0.5s;
+    }
+    .success.show {
+      opacity: 1;
+    }
+    .icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+    }
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="icon">📍</div>
+    <h1>Geocache gefunden!</h1>
+    <p>Gratulation! Du hast den Geocache erfolgreich entdeckt. Gut gemacht, Abenteurer!</p>
+
+    <div class="hint">
+      🔐 <strong>Hinweis:</strong> Zum Öffnen entschlüssele mit Base64 das Passwort. Dafür kannst du einmal deine tolle App benutzen.
+    </div>
+
+    <div class="password-box">
+      <p><strong>Passwort (Base64):</strong></p>
+      <div class="password" id="b64">R3JhdHR1bGF0aW9uISBkdSBoYXN0IGRlbiBDb2RlIGVudHNjaGz8c3NlbHQgZGVyIGNvZGUgenVtIPZmZm5lbiBpc3QgMTIzNA==</div>
+      
+      <div class="buttons">
+        <button class="decode-btn" id="help-btn" onclick="window.open('https://www.multisolver.de/', '_blank')">💡 Webseite zum entschlüsseln (multisolver.de)</button>
+      </div>
+      
+      <p class="success" id="result"></p>
+    </div>
+  </div>
+</body>
+</html>
