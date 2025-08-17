@@ -875,6 +875,29 @@
         </div>
     </div>
 </div>
+
+<div class="faq-item">
+    <div class="question">QR Cache</div>
+    <div class="answer">
+        <div class="sub-faq-item">
+            <div class="sub-question">4.1 Wo ist der Cache?</div>
+            <div class="sub-answer">Der QR Cache befindet sich in einer Höhe von etwa 1,5 m an einem stabilen Mast oder Baum. [Spoiler Bild] Achte auf ein kleines witterungsbeständiges Etikett mit einem QR-Code.</div>
+        </div>
+        <div class="sub-faq-item">
+            <div class="sub-question">4.2 Wie scannen?</div>
+            <div class="sub-answer">Öffne die Kamera-App deines Smartphones oder eine QR-Code-Scanner-App und richte sie auf den QR-Code. Halte das Gerät ruhig und senkrecht, bis der Code erkannt wird. Stelle sicher, dass genügend Licht vorhanden ist.</div>
+        </div>
+        <div class="sub-faq-item">
+            <div class="sub-question">4.3 Wie entschlüsseln?</div>
+            <div class="sub-answer">Der gescannte Code ist in Base64 kodiert. Verwende dazu eine Kryptographie-App oder besuche <a href="https://www.multisolver.de" target="_blank">multisolver.de</a>, wähle „Base64 decode“ und entschlüssele den Text. Der resultierende Code öffnet das Schloss.</div>
+        </div>
+        <div class="sub-faq-item">
+            <div class="sub-question">4.4 Wie öffne ich das Schloss mit dem entschlüsselten Code?</div>
+            <div class="sub-answer">Gib den nach der Base64-Decodierung erhaltenen Code (meist eine Zahlenkombination) auf dem digitalen Zahlenschloss des Caches ein. Drücke danach auf „OK“ oder „Enter“, um das Schloss zu öffnen. Achte darauf, keine Leerzeichen oder Sonderzeichen einzugeben.</div>
+        </div>
+    </div>
+</div>
+
   <!-- Weitere Geocache-Fragen hier einfügen -->
 
 </div>
@@ -963,6 +986,17 @@ let chatHistory = [
             "ziel": "Du musst 4 vollständige Linien abschließen, um den Code freizuschalten.",
             "code_erhalten": "Nachdem 4 Linien erfolgreich abgeschlossen wurden, wird ein numerischer Code angezeigt.",
             "schloss_oeffnen": "Gib den erhaltenen Code auf dem Zahlenschloss des Caches ein, um ihn zu öffnen."
+          },
+          "qr_cache_4": {
+            "position": {
+              "hoehe": "1.5m",
+              "spoiler_bild": "[Spoiler Bild]"
+            },
+            "wo_ist_der_cache": "Der QR Cache ist in etwa 1,5 m Höhe an einem stabilen Mast oder Baum angebracht. Achte auf ein wetterfestes Etikett mit sichtbarem QR-Code.",
+            "wie_scannen": "Öffne die Kamera-App oder eine QR-Scanner-App auf deinem Smartphone. Richte die Kamera ruhig und senkrecht auf den QR-Code. Stelle sicher, dass genügend Licht vorhanden ist, damit der Code erkannt wird.",
+            "wie_entschluesseln": "Der gescannte Text ist in Base64 kodiert. Verwende eine Kryptographie-App oder besuche https://www.multisolver.de, wähle 'Base64 decode' und entschlüssele den Code. Der resultierende Text ist der Zahlencode für das Schloss.",
+            "schloss_oeffnen": "Gib den nach der Base64-Decodierung erhaltenen Code (meist Zahlen) auf dem digitalen Zahlenschloss des Caches ein. Drücke 'OK' oder 'Enter', um das Schloss zu öffnen. Achte darauf, keine Leerzeichen oder zusätzlichen Zeichen einzugeben.",
+            "fehlerbehebung": "Falls der Code nicht funktioniert: Überprüfe die Decodierung, stelle sicher, dass du den vollen QR-Code gescannt hast und keine falschen Zeichen enthalten sind. Wiederhole den Scan gegebenenfalls unter besserer Beleuchtung."
           }
         }
       `
