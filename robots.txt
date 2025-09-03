@@ -4,9 +4,7 @@ Allow: /
 # Sitemap
 Sitemap: https://lennarthuhn.github.io/sitemap.xml
 
-# Google AdSense
-User-agent: Mediapartners-Google
-Disallow:
+
 
 # Crawl-delay für langsame Server (optional, bei GitHub Pages nicht nötig)
 # Crawl-delay: 10
