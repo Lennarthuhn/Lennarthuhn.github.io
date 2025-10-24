@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32-CAM Remote Control</title>
+    <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .ready { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .capturing { background-color: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .sending { background-color: #cce7ff; color: #004085; border: 1px solid #b3d7ff; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .disconnected { background-color: #e2e3e5; color: #383d41; border: 1px solid #d6d8db; }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        
+        #captureBtn {
+            background-color: #007bff;
+            color: white;
+        }
+        
+        #captureBtn:hover:not(:disabled) {
+            background-color: #0056b3;
+        }
+        
+        #captureBtn:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        
+        #connectBtn { background-color: #28a745; color: white; }
+        #connectBtn:hover { background-color: #218838; }
+        
+        #disconnectBtn { background-color: #dc3545; color: white; }
+        #disconnectBtn:hover { background-color: #c82333; }
+        
+        #clearBtn { background-color: #6c757d; color: white; }
+        #clearBtn:hover { background-color: #545b62; }
+        
+        .image-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        #receivedImage {
+            max-width: 100%;
+            max-height: 600px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .progress-container {
+            margin: 20px 0;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: #28a745;
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .info-panel {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            color: #007bff;
+            font-style: italic;
+        }
+        
+        .error-message {
+            color: #dc3545;
+            text-align: center;
+            margin: 10px 0;
+        }
+        
+        .external-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+        
+        .link-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .link-button:hover {
+            background-color: #0056b3;
+            color: white;
+            text-decoration: none;
+        }
+        
+        .link-button.telegram {
+            background-color: #0088cc;
+        }
+        
+        .link-button.telegram:hover {
+            background-color: #006699;
+        }
+        
+        .link-button.dropbox {
+            background-color: #0061ff;
+        }
+        
+        .link-button.dropbox:hover {
+            background-color: #0047b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ESP32-CAM Fernsteuerung</h1>
+        
+        <!-- Externe Links Bereich -->
+        <div class="external-links">
+            <a href="https://www.dropbox.com/scl/fo/g3dssgc7c0vsm9s8mqve0/AMKRfLCzdr6TdLlX1awymrs?rlkey=kjnven6yys5x5a523ki23huz0&st=es2p1kav&dl=0" 
+               target="_blank" 
+               class="link-button dropbox">
+                📁 Dropbox Ordner
+            </a>
+            
+            <a href="https://t.me/Huhn1_bot" 
+               target="_blank" 
+               class="link-button telegram">
+                📱 Telegram Bot
+            </a>
+        </div>
+        
+        <div id="status" class="status disconnected">Nicht verbunden</div>
+        
+        <div class="controls">
+            <button id="connectBtn">Verbinden</button>
+            <button id="disconnectBtn">Trennen</button>
+            <button id="captureBtn">Bild aufnehmen</button>
+            <button id="clearBtn">Bild löschen</button>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div id="progressFill" class="progress-fill"></div>
+            </div>
+            <div id="progressText" style="text-align: center; margin-top: 5px;"></div>
+        </div>
+        
+        <div id="loading" class="loading">Empfange Bild...</div>
+        <div id="error" class="error-message"></div>
+        
+        <div class="image-container">
+            <img id="receivedImage" src="" alt="Empfangen Bild von ESP32-CAM" style="display: none;">
+        </div>
+        
+        <div class="info-panel">
+            <h3>Verbindungsinformationen</h3>
+            <div class="stats">
+                <div class="stat-item">
+                    <strong>Broker:</strong><br>
+                    <span id="brokerInfo">broker.hivemq.com:8884</span>
+                </div>
+                <div class="stat-item">
+                    <strong>ESP32 Status:</strong><br>
+                    <span id="espStatus">Unbekannt</span>
+                </div>
+                <div class="stat-item">
+                    <strong>Letztes Bild:</strong><br>
+                    <span id="lastUpdate">Nie</span>
+                </div>
+                <div class="stat-item">
+                    <strong>Empfangene Bilder:</strong><br>
+                    <span id="imageCount">0</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class MQTTImageReceiver {
+            constructor() {
+                this.client = null;
+                this.isConnected = false;
+                this.espReady = false;
+                this.currentChunks = [];
+                this.totalChunks = 0;
+                this.receivedChunks = 0;
+                this.imageCount = 0;
+                
+                this.config = {
+                    host: 'wss://broker.hivemq.com:8884/mqtt',
+                    imageTopic: 'esp32-cam/image',
+                    controlTopic: 'esp32-cam/control',
+                    statusTopic: 'esp32-cam/status',
+                    clientId: 'web-client-' + Math.random().toString(16).substr(2, 8)
+                };
+                
+                this.initializeElements();
+                this.initializeEventListeners();
+            }
+            
+            initializeElements() {
+                this.statusElement = document.getElementById('status');
+                this.connectBtn = document.getElementById('connectBtn');
+                this.disconnectBtn = document.getElementById('disconnectBtn');
+                this.captureBtn = document.getElementById('captureBtn');
+                this.clearBtn = document.getElementById('clearBtn');
+                this.imageElement = document.getElementById('receivedImage');
+                this.loadingElement = document.getElementById('loading');
+                this.errorElement = document.getElementById('error');
+                this.progressFill = document.getElementById('progressFill');
+                this.progressText = document.getElementById('progressText');
+                this.lastUpdateElement = document.getElementById('lastUpdate');
+                this.imageCountElement = document.getElementById('imageCount');
+                this.espStatusElement = document.getElementById('espStatus');
+                this.brokerInfoElement = document.getElementById('brokerInfo');
+            }
+            
+            initializeEventListeners() {
+                this.connectBtn.addEventListener('click', () => this.connect());
+                this.disconnectBtn.addEventListener('click', () => this.disconnect());
+                this.captureBtn.addEventListener('click', () => this.requestCapture());
+                this.clearBtn.addEventListener('click', () => this.clearImage());
+            }
+            
+            async connect() {
+                this.updateStatus('connecting', 'Verbinde...');
+                this.clearError();
+                
+                try {
+                    this.client = mqtt.connect(this.config.host, {
+                        clientId: this.config.clientId,
+                        clean: true,
+                        connectTimeout: 4000,
+                        reconnectPeriod: 1000,
+                    });
+                    
+                    this.client.on('connect', () => {
+                        this.onConnectSuccess();
+                    });
+                    
+                    this.client.on('error', (error) => {
+                        this.onConnectFailure(error);
+                    });
+                    
+                    this.client.on('close', () => {
+                        this.onConnectionLost();
+                    });
+                    
+                    this.client.on('message', (topic, message) => {
+                        this.onMessageArrived(topic, message);
+                    });
+                    
+                } catch (error) {
+                    this.showError('Verbindungsfehler: ' + error.message);
+                    this.updateStatus('disconnected', 'Verbindung fehlgeschlagen');
+                }
+            }
+            
+            onConnectSuccess() {
+                this.isConnected = true;
+                this.updateStatus('connected', 'Verbunden mit MQTT Broker');
+                this.showError('');
+                
+                // Subscribe to topics
+                this.client.subscribe(this.config.imageTopic);
+                this.client.subscribe(this.config.statusTopic);
+                
+                console.log('Subscribed to topics');
+                this.updateBrokerInfo();
+                
+                // Status vom ESP32 anfordern
+                this.requestStatus();
+            }
+            
+            requestStatus() {
+                if (this.client && this.isConnected) {
+                    this.client.publish(this.config.controlTopic, 'STATUS');
+                }
+            }
+            
+            requestCapture() {
+                if (this.client && this.isConnected && this.espReady) {
+                    this.captureBtn.disabled = true;
+                    this.clearError();
+                    this.showLoading(true);
+                    this.updateProgress(0, 'Bitte warten...');
+                    
+                    this.client.publish(this.config.controlTopic, 'CAPTURE');
+                    console.log('Capture request sent');
+                }
+            }
+            
+            onConnectFailure(error) {
+                this.isConnected = false;
+                this.espReady = false;
+                this.updateStatus('disconnected', 'Verbindung fehlgeschlagen');
+                this.showError('Verbindung zum Broker fehlgeschlagen: ' + error.message);
+                this.updateESPStatus('Unbekannt');
+            }
+            
+            onConnectionLost() {
+                this.isConnected = false;
+                this.espReady = false;
+                this.updateStatus('disconnected', 'Verbindung verloren');
+                this.updateESPStatus('Unbekannt');
+            }
+            
+            onMessageArrived(topic, message) {
+                try {
+                    const payload = message.toString();
+                    
+                    if (topic === this.config.statusTopic) {
+                        this.handleStatusMessage(payload);
+                    } else if (topic === this.config.imageTopic) {
+                        this.handleImageMessage(payload);
+                    }
+                    
+                } catch (error) {
+                    console.error('Fehler beim Verarbeiten der Nachricht:', error);
+                    this.showError('Fehler beim Verarbeiten der Nachricht');
+                }
+            }
+            
+            handleStatusMessage(payload) {
+                console.log('Status update:', payload);
+                
+                try {
+                    // Versuche JSON zu parsen
+                    const statusData = JSON.parse(payload);
+                    this.updateESPStatus(statusData.status || payload);
+                    
+                    if (statusData.status === 'READY') {
+                        this.espReady = true;
+                        this.captureBtn.disabled = false;
+                        this.showLoading(false);
+                    } else if (statusData.status === 'CAPTURING') {
+                        this.espReady = false;
+                        this.captureBtn.disabled = true;
+                        this.updateProgress(0, 'Bild wird aufgenommen...');
+                    } else if (statusData.status === 'SENDING') {
+                        this.updateProgress(statusData.progress || 0, 'Bild wird übertragen...');
+                    }
+                    
+                } catch (e) {
+                    // Fallback für String-Nachrichten
+                    this.updateESPStatus(payload);
+                    
+                    if (payload === 'READY') {
+                        this.espReady = true;
+                        this.captureBtn.disabled = false;
+                        this.showLoading(false);
+                    } else if (payload === 'CAPTURING') {
+                        this.espReady = false;
+                        this.captureBtn.disabled = true;
+                    }
+                }
+            }
+            
+            handleImageMessage(payload) {
+                if (payload === "END") {
+                    this.completeImage();
+                    return;
+                }
+                
+                if (payload.startsWith("CHUNK:")) {
+                    this.processChunk(payload);
+                }
+            }
+            
+            processChunk(chunkData) {
+                const parts = chunkData.split(":");
+                if (parts.length >= 4) {
+                    const chunkIndex = parseInt(parts[1]);
+                    const totalChunks = parseInt(parts[2]);
+                    const chunkContent = parts.slice(3).join(":");
+                    
+                    if (this.totalChunks !== totalChunks) {
+                        this.currentChunks = new Array(totalChunks);
+                        this.totalChunks = totalChunks;
+                        this.receivedChunks = 0;
+                    }
+                    
+                    this.currentChunks[chunkIndex] = chunkContent;
+                    this.receivedChunks++;
+                    
+                    const progress = (this.receivedChunks / this.totalChunks) * 100;
+                    this.updateProgress(progress, `Empfange... ${this.receivedChunks}/${this.totalChunks}`);
+                    
+                    console.log(`Chunk ${chunkIndex + 1}/${totalChunks} empfangen`);
+                }
+            }
+            
+            completeImage() {
+                if (this.receivedChunks === this.totalChunks) {
+                    const completeImage = this.currentChunks.join('');
+                    this.displayImage(completeImage);
+                    this.showLoading(false);
+                    this.updateProgress(100, 'Bild empfangen!');
+                    
+                    // Reset
+                    setTimeout(() => {
+                        this.updateProgress(0, '');
+                        this.currentChunks = [];
+                        this.totalChunks = 0;
+                        this.receivedChunks = 0;
+                    }, 2000);
+                    
+                } else {
+                    this.showError('Unvollständiges Bild empfangen');
+                    this.showLoading(false);
+                    this.updateProgress(0, 'Fehler beim Empfang');
+                }
+            }
+            
+            displayImage(base64Data) {
+                try {
+                    this.imageElement.src = "data:image/jpeg;base64," + base64Data;
+                    this.imageElement.style.display = 'block';
+                    this.clearError();
+                    
+                    this.imageCount++;
+                    this.updateStats();
+                    
+                    console.log('Bild erfolgreich angezeigt');
+                } catch (error) {
+                    console.error('Fehler beim Anzeigen des Bildes:', error);
+                    this.showError('Fehler beim Dekodieren des Bildes');
+                }
+            }
+            
+            updateProgress(percentage, text) {
+                this.progressFill.style.width = percentage + '%';
+                this.progressText.textContent = text || '';
+            }
+            
+            showLoading(show) {
+                this.loadingElement.style.display = show ? 'block' : 'none';
+            }
+            
+            showError(message) {
+                this.errorElement.textContent = message;
+                this.errorElement.style.display = message ? 'block' : 'none';
+            }
+            
+            clearError() {
+                this.showError('');
+            }
+            
+            clearImage() {
+                this.imageElement.src = '';
+                this.imageElement.style.display = 'none';
+                this.clearError();
+                this.showLoading(false);
+                this.updateProgress(0, '');
+            }
+            
+            disconnect() {
+                if (this.client && this.isConnected) {
+                    this.client.end();
+                    this.isConnected = false;
+                    this.espReady = false;
+                    this.updateStatus('disconnected', 'Getrennt');
+                    this.updateESPStatus('Unbekannt');
+                    this.showError('');
+                    this.captureBtn.disabled = true;
+                }
+            }
+            
+            updateStatus(status, message) {
+                this.statusElement.className = 'status ' + status;
+                this.statusElement.textContent = message;
+            }
+            
+            updateESPStatus(status) {
+                this.espStatusElement.textContent = status;
+                this.espStatusElement.className = 
+                    status === 'READY' ? 'ready' :
+                    status === 'CAPTURING' ? 'capturing' :
+                    status === 'SENDING' ? 'sending' :
+                    status.includes('ERROR') ? 'error' : '';
+            }
+            
+            updateStats() {
+                this.lastUpdateElement.textContent = new Date().toLocaleTimeString();
+                this.imageCountElement.textContent = this.imageCount;
+            }
+            
+            updateBrokerInfo() {
+                this.brokerInfoElement.textContent = 'broker.hivemq.com:8884';
+            }
+        }
+        
+        // Initialize the application when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            window.imageReceiver = new MQTTImageReceiver();
+        });
+    </script>
+</body>
+</html>
