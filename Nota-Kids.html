@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geheimnisvolle Tür</title>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <!-- Matomo -->
+<script>
+  var _paq = window._paq = window._paq || [];
+  /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+  _paq.push(['trackPageView']);
+  _paq.push(['enableLinkTracking']);
+  (function() {
+    var u="https://lennarthuhnhuhn.matomo.cloud/";
+    _paq.push(['setTrackerUrl', u+'matomo.php']);
+    _paq.push(['setSiteId', '1']);
+    var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+    g.async=true; g.src='https://cdn.matomo.cloud/lennarthuhnhuhn.matomo.cloud/matomo.js'; s.parentNode.insertBefore(g,s);
+  })();
+</script>
+<!-- End Matomo Code -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            margin-bottom: 20px;
+            color: #f1c40f;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+            font-size: 2.5rem;
+        }
+        
+        .description {
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+        }
+        
+        .door-container {
+            position: relative;
+            width: 220px;
+            height: 340px;
+            margin: 30px auto;
+            perspective: 1000px;
+        }
+        
+        .door-frame {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #5D4037;
+            border-radius: 10px;
+            z-index: -1;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.7);
+        }
+        
+        .door {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, #8B4513, #5D4037);
+            border: 8px solid #5D4037;
+            border-radius: 5px;
+            transform-origin: left;
+            transition: transform 2s ease-in-out;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .door.open {
+            transform: rotateY(-100deg);
+        }
+        
+        .door-panel {
+            width: 80%;
+            height: 40px;
+            background-color: rgba(0, 0, 0, 0.3);
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .door-knob {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: radial-gradient(circle at 30% 30%, #FFD700, #B8860B);
+            border-radius: 50%;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            cursor: pointer;
+        }
+        
+        .input-container {
+            margin: 25px 0;
+        }
+        
+        input, textarea {
+            padding: 12px 15px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            margin-bottom: 15px;
+            resize: vertical;
+        }
+        
+        textarea {
+            height: 100px;
+            text-align: left;
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            box-shadow: 0 0 10px #f1c40f;
+            transform: scale(1.02);
+        }
+        
+        button {
+            padding: 12px 25px;
+            font-size: 18px;
+            background: linear-gradient(to bottom, #f1c40f, #f39c12);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s;
+            color: #2c3e50;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        button:hover {
+            background: linear-gradient(to bottom, #f39c12, #e67e22);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .message {
+            margin-top: 20px;
+            font-size: 18px;
+            min-height: 25px;
+            font-weight: bold;
+            padding: 10px;
+            border-radius: 5px;
+            transition: all 0.5s;
+        }
+        
+        .success {
+            background-color: rgba(46, 204, 113, 0.3);
+            color: #2ecc71;
+        }
+        
+        .error {
+            background-color: rgba(231, 76, 60, 0.3);
+            color: #e74c3c;
+        }
+        
+        .warning {
+            background-color: rgba(241, 196, 15, 0.3);
+            color: #f1c40f;
+        }
+        
+        .behind-door {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #3498db, #9b59b6);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            font-size: 24px;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            padding: 20px;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        .behind-door.visible {
+            opacity: 1;
+        }
+        
+        .gif-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 5px;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out 0.5s;
+        }
+        
+        .gif-container.visible {
+            opacity: 1;
+        }
+        
+        .gif-container img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 5px;
+        }
+        
+        .email-status {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .email-status h3 {
+            margin-bottom: 10px;
+            color: #f1c40f;
+        }
+        
+        .limit-info {
+            background-color: rgba(241, 196, 15, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            border-left: 4px solid #f1c40f;
+        }
+        
+        .hint {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #f1c40f;
+            font-style: italic;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            50% { transform: translateX(10px); }
+            75% { transform: translateX(-10px); }
+            100% { transform: translateX(0); }
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+        }
+        
+        footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .door-container {
+                width: 180px;
+                height: 280px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Geheimnisvolle Tür</h1>
+        <p class="description">Gib den geheimen Code ein und eine Nachricht, die mit der Bestätigungs-E-Mail gesendet werden soll.</p>
+        
+        <div class="door-container">
+            <div class="door-frame"></div>
+            <div class="door" id="door">
+                <div class="door-panel"></div>
+                <div class="door-panel"></div>
+                <div class="door-panel"></div>
+                <div class="door-knob"></div>
+            </div>
+            <div class="behind-door" id="behind-door" style="z-index: -1;">
+                <div class="gif-container" id="gif-container">
+                    <!-- GIF wird hier dynamisch eingefügt -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="input-container">
+            <input type="text" id="code-input" placeholder="Geheimen Code eingeben" maxlength="10">
+            <textarea id="message-input" placeholder="Ihre Nachricht, die mit der E-Mail gesendet werden soll...">Die geheime Tür wurde erfolgreich geöffnet!</textarea>
+            <button id="submit-btn">Tür öffnen & E-Mail senden</button>
+        </div>
+        
+        <div class="message" id="message"></div>
+        
+
+    
+    <footer>
+        <p>Erstellt von LennArt</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // EmailJS initialisieren
+            emailjs.init('GXfPcocLt-C6khk3V');
+            
+            const door = document.getElementById('door');
+            const codeInput = document.getElementById('code-input');
+            const messageInput = document.getElementById('message-input');
+            const submitBtn = document.getElementById('submit-btn');
+            const message = document.getElementById('message');
+            const behindDoor = document.getElementById('behind-door');
+            const gifContainer = document.getElementById('gif-container');
+            
+            // Der geheime Code (kann geändert werden)
+            const secretCode = "1234";
+            
+            // Liste der verfügbaren GIFs
+            const gifs = [
+                "https://media.tenor.com/g5cyfFrLhD0AAAAM/despicable-me-minions.gif",
+                "https://media.tenor.com/TsCHkxhwpM0AAAAM/congrats-congratulations.gif",
+                "https://www.gifservice.fr/img/gif-vignette-small/de68fe5f49ee35715aef8f7f0f33c5b9/396635-nachrichten-deutsche-herzlichen-glckwunsch-04.gif",
+                "https://i.giphy.com/1isLdTUB0pH8BiPyYx.webp",
+                "https://i.makeagif.com/media/10-31-2022/PQDmyH.gif",
+                "https://mitvergnuegen.com/wp-content/uploads/2015/05/wiegehts.gif",
+                "https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExcjl5OW9oMzVhZDlobTBlM21yajRsNWZveGFscmxlZjVxamx5bGtraCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/TiajUFtwZ8ijmVmDB6/giphy.gif",
+                "https://media.tenor.com/dxYXgRx9yw8AAAAM/ui-toll-marty.gif",
+                "https://y.yarn.co/c99c8db4-bdf3-4e69-a4a2-4e1f0e54793d_text.gif"
+            ];
+            
+            // Funktion zum Auswählen eines zufälligen GIFs
+            function getRandomGif() {
+                const randomIndex = Math.floor(Math.random() * gifs.length);
+                return gifs[randomIndex];
+            }
+            
+            // Funktion zum Anzeigen eines zufälligen GIFs
+            function showRandomGif() {
+                const randomGifUrl = getRandomGif();
+                gifContainer.innerHTML = `<img src="${randomGifUrl}" alt="Überraschungs-GIF">`;
+                
+                // Zeige das GIF sofort an
+                behindDoor.classList.add('visible');
+                setTimeout(() => {
+                    gifContainer.classList.add('visible');
+                }, 100);
+            }
+            
+            // Prüfen, ob bereits eine E-Mail gesendet wurde
+            function hasEmailBeenSent() {
+                return localStorage.getItem('emailSent') === 'true';
+            }
+            
+            // Markieren, dass eine E-Mail gesendet wurde
+            function markEmailAsSent() {
+                localStorage.setItem('emailSent', 'true');
+            }
+            
+            // UI aktualisieren basierend auf E-Mail-Status
+            function updateUI() {
+                if (hasEmailBeenSent()) {
+                    message.textContent = "Hinweis: Sie haben bereits ein E-Mail gesendet. Die Tür kann trotzdem geöffnet werden.";
+                    message.className = "message warning";
+                }
+            }
+            
+            // Funktion zum Senden der E-Mail
+            function sendEmail() {
+                if (hasEmailBeenSent()) {
+                    message.textContent = "Tür geöffnet! (E-Mail wurde bereits gesendet - Limit: 1 E-Mail pro Person)";
+                    message.className = "message warning";
+                    return;
+                }
+                
+                const userMessage = messageInput.value.trim() || "Die geheime Tür wurde erfolgreich geöffnet!";
+                
+                const templateParams = {
+                    user_name: "Tür-Öffner",
+                    message: userMessage,
+                    to_email: "empfaenger@example.com" // Diese E-Mail sollte im Template definiert sein
+                };
+                
+                emailjs.send('service_az46xjg', 'template_bq592zq', templateParams)
+                    .then(function(response) {
+                        console.log('E-Mail erfolgreich gesendet!', response.status, response.text);
+                        markEmailAsSent();
+                        updateUI();
+                        message.textContent = "Erfolg! Die Tür ist offen und die E-Mail wurde gesendet.";
+                        message.className = "message success";
+                    }, function(error) {
+                        console.log('Fehler beim Senden der E-Mail:', error);
+                        message.textContent = "Die Tür ist offen, aber die E-Mail konnte nicht gesendet werden.";
+                        message.className = "message error";
+                    });
+            }
+            
+            // Funktion zum Öffnen der Tür
+            function openDoor() {
+                // Zeige sofort ein zufälliges GIF an
+                showRandomGif();
+                
+                door.classList.add('open');
+                message.textContent = "Tür öffnet sich...";
+                message.className = "message success";
+                
+                // Sende automatisch die E-Mail (nur beim ersten Mal)
+                setTimeout(() => {
+                    sendEmail();
+                }, 1000);
+            }
+            
+            submitBtn.addEventListener('click', function() {
+                const enteredCode = codeInput.value.trim();
+                
+                if (enteredCode === secretCode) {
+                    // Richtiger Code - Tür immer öffnen
+                    openDoor();
+                    
+                } else {
+                    // Falscher Code
+                    message.textContent = "Falscher Code! Versuche es erneut.";
+                    message.className = "message error";
+                    
+                    // Tür-Wackel-Animation
+                    door.classList.add('shake');
+                    setTimeout(function() {
+                        door.classList.remove('shake');
+                    }, 500);
+                }
+            });
+            
+            // Code-Eingabe mit Enter-Taste bestätigen
+            codeInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    submitBtn.click();
+                }
+            });
+            
+            // UI beim Laden initialisieren
+            updateUI();
+        });
+    </script>
+</body>
+</html>
