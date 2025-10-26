@@ -118,6 +118,26 @@
         
         .input-container {
             margin: 25px 0;
+            transition: all 0.5s ease-in-out;
+        }
+        
+        .input-container.hidden {
+            opacity: 0;
+            height: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+        
+        .message-input-field {
+            transition: all 0.5s ease-in-out;
+            max-height: 200px;
+            overflow: hidden;
+        }
+        
+        .message-input-field.hidden {
+            opacity: 0;
+            max-height: 0;
+            margin: 0;
         }
         
         input, textarea {
@@ -272,6 +292,49 @@
             font-style: italic;
         }
         
+        .message-after-open {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s ease-in-out;
+        }
+        
+        .message-after-open.visible {
+            opacity: 1;
+            max-height: 300px;
+        }
+        
+        .message-after-open textarea {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .message-after-open button {
+            margin-top: 0;
+        }
+        
+        .reset-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #2ecc71;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.5s ease-in-out;
+        }
+        
+        .reset-container.visible {
+            opacity: 1;
+            max-height: 200px;
+        }
+        
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -332,15 +395,30 @@
             </div>
         </div>
         
-        <div class="input-container">
+        <div class="input-container" id="input-container">
             <input type="text" id="code-input" placeholder="Geheimcode eingeben" maxlength="7">
-            <textarea id="message-input" placeholder="Deine Nachricht an das Detektivbüro von Nota-Kids"></textarea>
-            <button id="submit-btn">Tür öffnen & E-Mail senden</button>
+            <div class="message-input-field" id="message-input-field">
+                <textarea id="message-input" placeholder="Deine Nachricht an das Detektivbüro von Nota-Kids"></textarea>
+            </div>
+            <button id="submit-btn">Tür öffnen</button>
         </div>
         
         <div class="message" id="message"></div>
         
-
+        <!-- Nachrichten-Möglichkeit nach dem Öffnen der Tür -->
+        <div class="message-after-open" id="message-after-open">
+            <h3>Möchtest du doch eine Nachricht senden?</h3>
+            <textarea id="message-after-input" placeholder="Deine Nachricht an das Detektivbüro"></textarea>
+            <button id="send-message-btn">Nachricht senden</button>
+            <div id="message-after-status"></div>
+        </div>
+        
+        <!-- Reset-Button zum erneuten Öffnen -->
+        <div class="reset-container" id="reset-container">
+            <h3>Tür erneut öffnen?</h3>
+            <button id="reset-btn">Tür schließen und neu starten</button>
+        </div>
+    </div>
     
     <footer>
         <p>Erstellt von LennArt</p>
@@ -354,10 +432,18 @@
             const door = document.getElementById('door');
             const codeInput = document.getElementById('code-input');
             const messageInput = document.getElementById('message-input');
+            const messageInputField = document.getElementById('message-input-field');
             const submitBtn = document.getElementById('submit-btn');
             const message = document.getElementById('message');
             const behindDoor = document.getElementById('behind-door');
             const gifContainer = document.getElementById('gif-container');
+            const inputContainer = document.getElementById('input-container');
+            const messageAfterOpen = document.getElementById('message-after-open');
+            const messageAfterInput = document.getElementById('message-after-input');
+            const sendMessageBtn = document.getElementById('send-message-btn');
+            const messageAfterStatus = document.getElementById('message-after-status');
+            const resetContainer = document.getElementById('reset-container');
+            const resetBtn = document.getElementById('reset-btn');
             
             // Der geheime Code (kann geändert werden)
             const secretCode = "7163055";
@@ -401,6 +487,9 @@
             // Markieren, dass eine E-Mail gesendet wurde
             function markEmailAsSent() {
                 localStorage.setItem('emailSent', 'true');
+                // Verstecke beide Nachrichtenfelder
+                messageInputField.classList.add('hidden');
+                messageAfterOpen.classList.remove('visible');
             }
             
             // UI aktualisieren basierend auf E-Mail-Status
@@ -408,18 +497,18 @@
                 if (hasEmailBeenSent()) {
                     message.textContent = "Hinweis: Sie haben bereits ein E-Mail gesendet. Die Tür kann trotzdem geöffnet werden.";
                     message.className = "message warning";
+                    // Verstecke das erste Nachrichtenfeld
+                    messageInputField.classList.add('hidden');
+                    // Ändere den Button-Text
+                    submitBtn.textContent = "Tür öffnen";
                 }
             }
             
             // Funktion zum Senden der E-Mail
-            function sendEmail() {
+            function sendEmail(userMessage) {
                 if (hasEmailBeenSent()) {
-                    message.textContent = "Tür geöffnet! (E-Mail wurde bereits gesendet - Limit: 1 E-Mail pro Person)";
-                    message.className = "message warning";
-                    return;
+                    return false;
                 }
-                
-                const userMessage = messageInput.value.trim() || "";
                 
                 const templateParams = {
                     user_name: "Tür-Öffner",
@@ -432,17 +521,20 @@
                         console.log('E-Mail erfolgreich gesendet!', response.status, response.text);
                         markEmailAsSent();
                         updateUI();
-                        message.textContent = "Erfolg! Die Tür ist offen und die E-Mail wurde gesendet.";
-                        message.className = "message success";
+                        return true;
                     }, function(error) {
                         console.log('Fehler beim Senden der E-Mail:', error);
-                        message.textContent = "Die Tür ist offen, aber die E-Mail konnte nicht gesendet werden.";
-                        message.className = "message error";
+                        return false;
                     });
+                    
+                return true;
             }
             
             // Funktion zum Öffnen der Tür
             function openDoor() {
+                // Verstecke das erste Eingabefeld während des Öffnens
+                inputContainer.classList.add('hidden');
+                
                 // Zeige sofort ein zufälliges GIF an
                 showRandomGif();
                 
@@ -450,18 +542,83 @@
                 message.textContent = "Tür öffnet sich...";
                 message.className = "message success";
                 
-                // Sende automatisch die E-Mail (nur beim ersten Mal)
+                // Zeige die Nachrichten-Möglichkeit NUR an, wenn noch keine E-Mail gesendet wurde
                 setTimeout(() => {
-                    sendEmail();
+                    if (!hasEmailBeenSent()) {
+                        messageAfterOpen.classList.add('visible');
+                    }
+                    // Zeige den Reset-Button immer an
+                    setTimeout(() => {
+                        resetContainer.classList.add('visible');
+                    }, 2000);
+                }, 2000);
+            }
+            
+            // Funktion zum Schließen der Tür und Reset
+            function resetDoor() {
+                // Tür schließen
+                door.classList.remove('open');
+                
+                // Verstecke die hinteren Elemente
+                behindDoor.classList.remove('visible');
+                gifContainer.classList.remove('visible');
+                messageAfterOpen.classList.remove('visible');
+                resetContainer.classList.remove('visible');
+                
+                // Zeige das erste Eingabefeld wieder an
+                setTimeout(() => {
+                    inputContainer.classList.remove('hidden');
+                }, 500);
+                
+                // Leere die Eingabefelder
+                codeInput.value = "";
+                messageInput.value = "";
+                messageAfterInput.value = "";
+                
+                // Setze Statusmeldungen zurück
+                message.textContent = "";
+                messageAfterStatus.textContent = "";
+                
+                // Zeige Hinweis, dass Code erneut eingegeben werden muss
+                setTimeout(() => {
+                    if (hasEmailBeenSent()) {
+                        message.textContent = "E-Mail wurde bereits gesendet. Gib den Code erneut ein, um die Tür zu öffnen!";
+                        message.className = "message warning";
+                    } else {
+                        message.textContent = "Gib den Code erneut ein, um die Tür zu öffnen!";
+                        message.className = "message warning";
+                    }
                 }, 1000);
             }
             
+            // Event-Listener für den Haupt-Button
             submitBtn.addEventListener('click', function() {
                 const enteredCode = codeInput.value.trim();
+                const userMessage = messageInput.value.trim();
                 
                 if (enteredCode === secretCode) {
                     // Richtiger Code - Tür immer öffnen
                     openDoor();
+                    
+                    // E-Mail nur senden, wenn eine Nachricht vorhanden ist UND noch keine E-Mail gesendet wurde
+                    if (userMessage !== "" && !hasEmailBeenSent()) {
+                        setTimeout(() => {
+                            const success = sendEmail(userMessage);
+                            if (success) {
+                                message.textContent = "Erfolg! Die Tür ist offen und die E-Mail wurde gesendet.";
+                                message.className = "message success";
+                            } else {
+                                message.textContent = "Die Tür ist offen, aber die E-Mail konnte nicht gesendet werden.";
+                                message.className = "message error";
+                            }
+                        }, 1000);
+                    } else if (hasEmailBeenSent()) {
+                        message.textContent = "Tür geöffnet! (E-Mail wurde bereits gesendet)";
+                        message.className = "message warning";
+                    } else {
+                        message.textContent = "Tür geöffnet!";
+                        message.className = "message success";
+                    }
                     
                 } else {
                     // Falscher Code
@@ -474,6 +631,37 @@
                         door.classList.remove('shake');
                     }, 500);
                 }
+            });
+            
+            // Event-Listener für den Nachrichten-Button nach dem Öffnen
+            sendMessageBtn.addEventListener('click', function() {
+                const userMessage = messageAfterInput.value.trim();
+                
+                if (userMessage === "") {
+                    messageAfterStatus.textContent = "Bitte gib eine Nachricht ein.";
+                    messageAfterStatus.className = "error";
+                    return;
+                }
+                
+                const success = sendEmail(userMessage);
+                if (success) {
+                    messageAfterStatus.textContent = "Nachricht erfolgreich gesendet!";
+                    messageAfterStatus.className = "success";
+                    messageAfterInput.value = "";
+                    
+                    // Verstecke das Nachrichtenfeld nach erfolgreichem Senden
+                    setTimeout(() => {
+                        messageAfterOpen.classList.remove('visible');
+                    }, 3000);
+                } else {
+                    messageAfterStatus.textContent = "E-Mail wurde bereits gesendet. Limit: 1 E-Mail pro Person.";
+                    messageAfterStatus.className = "error";
+                }
+            });
+            
+            // Event-Listener für Reset-Button
+            resetBtn.addEventListener('click', function() {
+                resetDoor();
             });
             
             // Code-Eingabe mit Enter-Taste bestätigen
