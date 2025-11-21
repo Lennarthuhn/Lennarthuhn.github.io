@@ -1,0 +1,1066 @@
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Hilfe Webseite meiner Geocaches: GC">
+<meta name="google-site-verification" content="V5uweFHM85qTa4ikcZr8HwY61YGgaq2zOlXHQ4IZ-9I" />
+<title>Geocache FAQ Seite</title>
+<style>
+  :root {
+    --primary-color: #2c5530;
+    --primary-dark: #1e3d22;
+    --primary-light: #4a7c59;
+    --secondary-color: #f9b233;
+    --secondary-dark: #e69e00;
+    --accent-color: #3498db;
+    --accent-light: #e3f2fd;
+    --text-dark: #333;
+    --text-light: #666;
+    --text-white: #fff;
+    --bg-light: #f8f9fa;
+    --border-color: #dee2e6;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+    --radius: 16px;
+    --radius-sm: 12px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --maple-leaf: #d4af37;
+    --forest-green: #228B22;
+    --trail-brown: #8B4513;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+    color: var(--text-dark);
+    line-height: 1.7;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+  }
+
+  
+  .container {
+    max-width: 850px;
+    margin: 40px auto;
+    padding: 30px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  h1 {
+    color: var(--primary-dark);
+    margin-bottom: 40px;
+    font-weight: 800;
+    font-size: 2.8rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px 30px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 20px;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--border-color);
+  }
+
+  h1::before {
+    content: '🧭';
+    margin-right: 15px;
+    vertical-align: middle;
+  }
+
+  .subtitle {
+    color: var(--text-light);
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .faq-item {
+    background: white;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    margin-bottom: 25px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: var(--transition);
+    border-left: 6px solid var(--primary-color);
+    position: relative;
+  }
+
+  .faq-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--primary-light), var(--secondary-color));
+    opacity: 0.6;
+  }
+
+  .faq-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary-light);
+  }
+
+  .question {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: var(--text-white);
+    padding: 22px 25px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition);
+    position: relative;
+    z-index: 2;
+  }
+
+  .question::after {
+    content: '⊞';
+    font-size: 1.4rem;
+    font-weight: bold;
+    transition: var(--transition);
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .faq-item.open .question::after {
+    content: '⊟';
+    transform: rotate(180deg);
+  }
+
+  .faq-item.open .question {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, #162e16 100%);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .sub-question {
+    background: linear-gradient(135deg, var(--accent-light) 0%, #d0e7f5 100%);
+    color: var(--primary-dark);
+    padding: 16px 25px;
+    cursor: pointer;
+    font-weight: 600;
+    margin: 0;
+    border-bottom: 1px solid rgba(221, 221, 221, 0.5);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: var(--transition);
+    position: relative;
+    z-index: 1;
+  }
+
+  .sub-question::after {
+    content: '▶';
+    font-weight: bold;
+    transition: var(--transition);
+    color: var(--primary-dark);
+  }
+
+  .sub-faq-item.open .sub-question::after {
+    content: '▼';
+    transform: rotate(90deg);
+  }
+
+  .sub-question:hover {
+    background: linear-gradient(135deg, #cce5ff 0%, #b8daff 100%);
+    transform: translateX(5px);
+  }
+
+  .answer, .sub-answer {
+    padding: 25px 30px;
+    display: none;
+    background: var(--bg-light);
+    border-top: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--border-color);
+    line-height: 1.8;
+    font-size: 16px;
+  }
+
+  .faq-item.open .answer {
+    display: block;
+    animation: slideDown 0.5s ease-out;
+  }
+
+  .sub-faq-item.open .sub-answer {
+    display: block;
+    animation: fadeIn 0.4s ease-out;
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-20px); max-height: 0; }
+    to { opacity: 1; transform: translateY(0); max-height: 500px; }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Chat Container Styles */
+  .chat-container {
+    width: 100%;
+    max-width: 850px;
+    background: white;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-lg);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    margin: 30px auto;
+    border: 1px solid var(--border-color);
+    background: linear-gradient(to bottom, #ffffff 0%, #f9fbfd 100%);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .chat-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color), var(--accent-color));
+    border-radius: 2px 2px 0 0;
+  }
+
+  .chat-container h1 {
+    text-align: center;
+    color: var(--primary-dark);
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-weight: 700;
+    font-size: 1.9rem;
+    position: relative;
+    display: inline-block;
+    padding: 0 20px;
+    background: white;
+    z-index: 2;
+  }
+
+  .chat-container h1::before {
+    content: '💬';
+    margin-right: 12px;
+    vertical-align: middle;
+  }
+
+  .api-status {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 25px;
+    font-size: 16px;
+    color: var(--success-color);
+    font-weight: 600;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-radius: 25px;
+    display: inline-block;
+    align-self: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(187, 222, 251, 0.5);
+  }
+
+  .api-status::before {
+    content: '🤖 ';
+  }
+
+  .chat-box {
+    height: 420px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #fcfdfe;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: white;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
+  }
+
+  .chat-box::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .chat-box::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  .chat-box::-webkit-scrollbar-thumb {
+    background: var(--primary-light);
+    border-radius: 4px;
+  }
+
+  .chat-box::-webkit-scrollbar-thumb:hover {
+    background: var(--primary-color);
+  }
+
+  .message {
+    margin-bottom: 5px;
+    padding: 15px 20px;
+    border-radius: 20px;
+    max-width: 80%;
+    word-wrap: break-word;
+    font-size: 16px;
+    line-height: 1.6;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+    animation: messageAppear 0.3s ease-out;
+  }
+
+  @keyframes messageAppear {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .user-message {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: var(--text-white);
+    align-self: flex-end;
+    border-bottom-right-radius: 5px;
+    font-weight: 500;
+    box-shadow: 0 3px 8px rgba(44, 85, 48, 0.3);
+  }
+
+  .user-message::after {
+    
+    margin-left: 8px;
+    opacity: 0.8;
+  }
+
+  .bot-message {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    color: var(--text-dark);
+    align-self: flex-start;
+    border-bottom-left-radius: 5px;
+    border: 1px solid #dee2e6;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .bot-message::before {
+    
+    margin-right: 8px;
+    color: var(--primary-color);
+  }
+
+  .typing-indicator {
+        
+            color: #666;
+            font-style: italic;
+            margin-bottom: 10px;
+            display: none;
+        
+
+  }
+
+  .typing-indicator::before {
+        margin-right: 8px;
+  }
+
+  .typing-dots {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: var(--text-light);
+    margin-left: 5px;
+    animation: typing 1.4s infinite both;
+  }
+
+  .typing-dots:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .typing-dots:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+
+  @keyframes typing {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-5px); }
+  }
+
+  .input-area {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+    position: relative;
+  }
+
+  #userInput {
+    flex: 1;
+    padding: 15px 20px;
+    border: 2px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    font-size: 16px;
+    outline: none;
+    transition: var(--transition);
+    background: white;
+    font-family: inherit;
+  }
+
+  #userInput:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(44, 85, 48, 0.1);
+    transform: translateY(-1px);
+  }
+
+  #userInput::placeholder {
+    color: var(--text-light);
+    opacity: 0.8;
+  }
+
+  #sendButton {
+    padding: 15px 28px;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 8px rgba(44, 85, 48, 0.3);
+  }
+
+  #sendButton:hover {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, #162e16 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(44, 85, 48, 0.4);
+  }
+
+  #sendButton:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(44, 85, 48, 0.3);
+  }
+
+  .clear-chat {
+    background: linear-gradient(135deg, var(--danger-color) 0%, #c82333 100%);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 12px 24px;
+    margin-top: 18px;
+    cursor: pointer;
+    align-self: flex-end;
+    font-weight: 600;
+    transition: var(--transition);
+    font-size: 15px;
+    box-shadow: 0 3px 6px rgba(220, 53, 69, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: inherit;
+  }
+
+  .clear-chat:hover {
+    background: linear-gradient(135deg, #c82333 0%, #bd1e2e 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(220, 53, 69, 0.4);
+  }
+
+  .clear-chat:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(220, 53, 69, 0.3);
+  }
+
+  /* Text formatting */
+  strong {
+    font-weight: 700;
+    color: var(--primary-dark);
+    background: linear-gradient(120deg, var(--secondary-light), var(--secondary-light)) bottom left;
+    background-size: 100% 2px;
+    background-repeat: no-repeat;
+    padding-bottom: 2px;
+  }
+
+  mark {
+    background: linear-gradient(120deg, rgba(249, 178, 51, 0.3), rgba(249, 178, 51, 0.3)) bottom left;
+    background-size: 100% 2px;
+    background-repeat: no-repeat;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--text-dark);
+    font-weight: 600;
+    box-shadow: 0 1px 3px rgba(249, 178, 51, 0.2);
+  }
+
+  em {
+    font-style: italic;
+    color: var(--text-light);
+    border-left: 3px solid var(--accent-color);
+    padding-left: 8px;
+  }
+
+  ul {
+    margin: 15px 0;
+    padding-left: 25px;
+    list-style-type: none;
+  }
+
+  ul li {
+    margin: 12px 0;
+    color: var(--text-dark);
+    position: relative;
+    padding-left: 15px;
+  }
+
+  ul li::before {
+    content: '•';
+    color: var(--secondary-color);
+    font-weight: bold;
+    position: absolute;
+    left: 0;
+    top: 2px;
+  }
+
+  ol {
+    margin: 15px 0;
+    padding-left: 30px;
+    list-style-type: none;
+  }
+
+  ol li {
+    margin: 12px 0;
+    color: var(--text-dark);
+    position: relative;
+    padding-left: 15px;
+  }
+
+  ol li::before {
+    content: counter(list-item) '.';
+    counter-increment: list-item;
+    color: var(--primary-color);
+    font-weight: bold;
+    position: absolute;
+    left: -25px;
+    width: 20px;
+    text-align: right;
+  }
+
+  /* Icons for better UX */
+  .question::before {
+    content: '📍';
+    margin-right: 12px;
+    font-size: 1.3em;
+  }
+
+  .sub-question::before {
+    content: '🔍';
+    margin-right: 12px;
+    font-size: 1.1em;
+  }
+
+  #sendButton::before {
+    content: '⬆️';
+  }
+
+  .clear-chat::before {
+    content: '🗑️';
+  }
+
+  /* Geocaching specific styling */
+  .geocaching-icon {
+    display: inline-block;
+    margin-right: 8px;
+    font-size: 1.2em;
+  }
+
+  .nfc-icon::before {
+    content: '📱';
+  }
+
+  .camera-icon::before {
+    content: '📷';
+  }
+
+  .warning::before {
+    content: '⚠️ ';
+    color: var(--warning-color);
+  }
+
+  .success::before {
+    content: '✅ ';
+    color: var(--success-color);
+  }
+
+  .info::before {
+    content: 'ℹ️ ';
+    color: var(--accent-color);
+  }
+
+  /* Responsive design */
+  @media (max-width: 768px) {
+    .container, .chat-container {
+      margin: 15px;
+      padding: 20px;
+    }
+    
+    h1 {
+      font-size: 2.2rem;
+      padding: 12px 20px;
+    }
+    
+    .chat-container h1 {
+      font-size: 1.6rem;
+    }
+    
+    .message {
+      max-width: 90%;
+      font-size: 15px;
+    }
+    
+    .input-area {
+      flex-direction: column;
+    }
+    
+    #sendButton {
+      align-self: flex-end;
+      width: 100%;
+    }
+    
+    .clear-chat {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    body::before, body::after {
+      display: none;
+    }
+  }
+
+  /* Print styles */
+  @media print {
+    body::before, body::after, .chat-container, .input-area, .api-status {
+      display: none !important;
+    }
+    
+    .container {
+      padding: 10px;
+      margin: 10px;
+    }
+    
+    h1 {
+      font-size: 24px;
+      text-align: center;
+      padding: 10px;
+      background: white !important;
+      box-shadow: none !important;
+      border: 1px solid #ddd !important;
+    }
+    
+    .faq-item {
+      page-break-inside: avoid;
+      border: 1px solid #ddd;
+    }
+    
+    .question, .sub-question {
+      background: #f0f0f0 !important;
+      color: #333 !important;
+    }
+  }
+
+  /* Accessibility improvements */
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  /* Focus styles for accessibility */
+  button:focus, input:focus {
+    outline: 3px solid var(--secondary-color);
+    outline-offset: 2px;
+  }
+
+  /* Loading animation for initial page load */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .container, .chat-container {
+    opacity: 0;
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
+
+  .container {
+    animation-delay: 0.1s;
+  }
+
+  .chat-container {
+    animation-delay: 0.3s;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Geocache Hilfe</h1>
+    <div class="faq-item">
+    <div class="question">Sterne Cache</div>
+    <div class="answer">
+      <div class="sub-faq-item">
+        <div class="sub-question">1.1 Wo befindet sich der Sterne Cache?</div>
+        <div class="sub-answer">Der Sterne Cache ist auf einer Höhe von 1.5m angebracht. [Spoiler Bild] Alle Sterne sind am gleichen Ort.</div>
+      </div>
+      <div class="sub-faq-item">
+        <div class="sub-question">1.2 Wie erhalte ich den Code zum Öffnen des Caches?</div>
+        <div class="sub-answer">Um den Code zu erhalten, musst du 3 sternförmige NFC-Tags scannen. Dies öffnet eine Webseite, die den Code enthält.</div>
+      </div>
+      <div class="sub-faq-item">
+        <div class="sub-question">1.3 Was ist NFC und wie aktiviere ich es?</div>
+        <div class="sub-answer">NFC (Near Field Communication) ist eine Kurzstreckenkommunikationstechnologie. Aktiviere NFC in den Einstellungen deines Smartphones (meist unter "Verbindung" oder "NFC").</div>
+      </div>
+      <div class="sub-faq-item">
+        <div class="sub-question">1.4 Wie scanne ich einen NFC-Tag?</div>
+        <div class="sub-answer">Halte dein Smartphone dicht an den NFC-Tag heran (meist 1-2 cm). Sobald das Gerät den Tag erkennt, wird automatisch eine Aktion gestartet.</div>
+      </div>
+      <div class="sub-faq-item">
+        <div class="sub-question">1.5 Wie öffne ich das Schloss des Caches?</div>
+        <div class="sub-answer">Das Schloss ist ein Tresor-Schmaltschloss. Dreh es nach rechts, dann links und abschließend wieder nach rechts. Sei dabei genau, da kleine Abweichungen das Schloss blockieren können!</div>
+      </div>
+      <div class="sub-faq-item">
+        <div class="sub-question">1.6 Wie schließe ich das Schloss wieder?</div>
+        <div class="sub-answer">Schließe das Schloss einfach indem du es zurückdrückst. Falls es schräg zugeschoben wurde, öffne es erneut und passe die Position an.</div>
+      </div>
+      <div class="sub-faq-item">
+        <div class="sub-question">1.7 Welche Probleme können auftreten?</div>
+        <div class="sub-answer">Mögliche Probleme: 
+          <ul>
+            <li>Das NFC-Tag wird nicht erkannt – stelle sicher, dass NFC aktiviert ist und dein Smartphone nahe genug am Tag liegt.</li>
+            <li>Das Schloss lässt sich nicht öffnen – kontrolliere deine Drehbewegungen und versuche es erneut.</li>
+            <li>Das Cache-Gehäuse klemmt – öffne es vorsichtig und achte darauf, es richtig zu schließen.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="faq-item">
+    <div class="question">Kamera Cache</div>
+    <div class="answer">
+      <div class="sub-faq-item">
+        <div class="sub-question">2.1 Wo befindet sich der Kamera Cache?</div>
+        <div class="sub-answer">Der Kamera Cache ist auf einer Höhe von 1.5m angebracht. [Spoiler Bild]</div>
+      </div>
+      <div class="sub-faq-item">
+        <div class="sub-question">2.2 Wie stelle ich Stromversorgung her?</div>
+        <div class="sub-answer">Schliesse das Stromkabel an deine Powerbank an. Falls du keine dabei hast, liegen Adapter für dein Smartphone im Cache.</div>
+      </div>
+      <div class="sub-faq-item">
+        <div class="sub-question">2.3 Wie verbinde ich mein Smartphone mit der Kamera?</div>
+        <div class="sub-answer">Verbinde dein Smartphone mit dem WLAN der Kamera. Der Netzwerkname lautet "Geocache Kamera" und es wird kein Passwort benötigt.</div>
+      </div>
+      <div class="sub-faq-item">
+        <div class="sub-question">2.4 Was tue ich, wenn die Verbindung nicht funktioniert?</div>
+        <div class="sub-answer">Schalte deine mobilen Daten aus und öffne die Webseite unter der Adresse: 192.168.4.1. Dies sollte dich in das Webinterface der Kamera leiten.</div>
+      </div>
+      <div class="sub-faq-item">
+        <div class="sub-question">2.5 Was muss ich fotografieren?</div>
+        <div class="sub-answer">Mache ein Selfie von dir oder fotografiere einfach deine Hand. dann erhälst du den code.</div>
+      </div>
+      <div class="sub-faq-item">
+        <div class="sub-question">2.6 Wie erhalte ich den Code?</div>
+        <div class="sub-answer">Nachdem du das Foto gemacht hast, wirst du automatisch den Code zum Öffnen des Caches erhalten.</div>
+      </div>
+      <div class="sub-faq-item">
+        <div class="sub-question">2.7 Was kann ich mit dem heruntergeladenen Foto machen?</div>
+        <div class="sub-answer">Das heruntergeladene Foto kannst du in deinen logeintrag hochladen und als Andenken auf dein Profil stellen oder es anderen Cachern teilen.</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="faq-item">
+    <div class="question">Tetris Cache</div>
+    <div class="answer">
+        <div class="sub-faq-item">
+            <div class="sub-question">3.1 Wo ist der Cache?</div>
+            <div class="sub-answer">Der Tetris Cache befindet sich in einer Höhe von etwa 1,5 m an einem stabilen Baum. [Spoiler Bild]</div>
+        </div>
+        <div class="sub-faq-item">
+            <div class="sub-question">3.2 Wie beginne ich: Stromversorgung herstellen</div>
+            <div class="sub-answer">Schließe deine Powerbank oder dein Smartphone mit dem beiliegenden Adapter an das Gerät an, um es zu aktivieren.</div>
+        </div>
+        <div class="sub-faq-item">
+            <div class="sub-question">3.3 Wie spiele ich Tetris?</div>
+            <div class="sub-answer">
+                Die Steuerung erfolgt über drei Knöpfe:
+                <ul>
+                    <li><strong>Oben</strong> = Block nach <strong>links</strong></li>
+                    <li><strong>Mitte</strong> = Block nach <strong>rechts</strong></li>
+                    <li><strong>Unten</strong> = Block <strong>drehen</strong></li>
+                </ul>
+                Achte darauf, die Blöcke geschickt zu platzieren, um vollständige Linien zu bilden.
+            </div>
+        </div>
+        <div class="sub-faq-item">
+            <div class="sub-question">3.4 Was ist Tetris?</div>
+            <div class="sub-answer">Tetris ist ein klassisches Puzzlespiel aus dem Jahr 1984. Spielsteine unterschiedlicher Form (Tetrominos) fallen nach unten, und das Ziel ist es, vollständige horizontale Linien ohne Lücken zu füllen. Sobald eine Linie voll ist, verschwindet sie, und du erhältst Punkte.</div>
+        </div>
+        <div class="sub-faq-item">
+            <div class="sub-question">3.5 Ziel: Linien abschließen</div>
+            <div class="sub-answer">Du musst <strong>4 vollständige Linien</strong> abschließen, um den Code freizuschalten. Jede vollständige Linie wird automatisch entfernt – platziere die Blöcke also strategisch!</div>
+        </div>
+        <div class="sub-faq-item">
+            <div class="sub-question">3.6 Wie öffne ich das Schloss?</div>
+            <div class="sub-answer">Nachdem du 4 Linien abgeschlossen hast, wird ein numerischer Code angezeigt. Gib diesen Code auf dem Zahlenschloss des Caches ein, um ihn zu öffnen.</div>
+        </div>
+    </div>
+</div>
+
+<div class="faq-item">
+    <div class="question">QR Cache</div>
+    <div class="answer">
+        <div class="sub-faq-item">
+            <div class="sub-question">4.1 Wo ist der Cache?</div>
+            <div class="sub-answer">Der QR Cache befindet sich in einer Höhe von etwa 1,5 m an einem stabilen Mast oder Baum. [Spoiler Bild] Achte auf ein kleines witterungsbeständiges Etikett mit einem QR-Code.</div>
+        </div>
+        <div class="sub-faq-item">
+            <div class="sub-question">4.2 Wie scannen?</div>
+            <div class="sub-answer">Öffne die Kamera-App deines Smartphones oder eine QR-Code-Scanner-App und richte sie auf den QR-Code. Halte das Gerät ruhig und senkrecht, bis der Code erkannt wird. Stelle sicher, dass genügend Licht vorhanden ist.</div>
+        </div>
+        <div class="sub-faq-item">
+            <div class="sub-question">4.3 Wie entschlüsseln?</div>
+            <div class="sub-answer">Der gescannte Code ist in Base64 kodiert. Verwende dazu eine Kryptographie-App oder besuche <a href="https://www.multisolver.de" target="_blank">multisolver.de</a>, wähle „Base64 decode“ und entschlüssele den Text. Der resultierende Code öffnet das Schloss.</div>
+        </div>
+        <div class="sub-faq-item">
+            <div class="sub-question">4.4 Wie öffne ich das Schloss mit dem entschlüsselten Code?</div>
+            <div class="sub-answer">Gib den nach der Base64-Decodierung erhaltenen Code (meist eine Zahlenkombination) auf dem digitalen Zahlenschloss des Caches ein. Drücke danach auf „OK“ oder „Enter“, um das Schloss zu öffnen. Achte darauf, keine Leerzeichen oder Sonderzeichen einzugeben.</div>
+        </div>
+    </div>
+</div>
+
+  <!-- Weitere Geocache-Fragen hier einfügen -->
+
+</div>
+    <div class="chat-container">
+        <h1>Geocaching Chat</h1>
+        <div class="api-status">KI Hilfe</div>
+        <div class="chat-box" id="chatBox">
+            <div class="typing-indicator" id="typingIndicator">Ki schreibt...</div>
+        </div>
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Schreibe deine Nachricht..." autocomplete="off">
+            <button id="sendButton">Senden</button>
+        </div>
+        <button class="clear-chat" id="clearChat">Chat leeren</button>
+    </div>
+<script>
+  // Toggle main questions
+  document.querySelectorAll('.question').forEach(question => {
+    question.addEventListener('click', () => {
+      const parent = question.parentElement;
+      parent.classList.toggle('open');
+    });
+  });
+
+  // Toggle sub-questions
+  document.querySelectorAll('.sub-question').forEach(subQuestion => {
+    subQuestion.addEventListener('click', () => {
+      const subParent = subQuestion.parentElement;
+      subParent.classList.toggle('open');
+    });
+  });
+
+document.addEventListener('DOMContentLoaded', function () {
+    const chatBox = document.getElementById('chatBox');
+    const userInput = document.getElementById('userInput');
+    const sendButton = document.getElementById('sendButton');
+    const typingIndicator = document.getElementById('typingIndicator');
+    const clearChatButton = document.getElementById('clearChat');
+
+    // Chat-Verlauf speichern
+let chatHistory = [
+    { 
+      role: "system", 
+      content: `
+        {
+          "stern_cache_1": {
+            "position": {
+              "hoehe": "1.5m",
+              "spoiler_bild": "[Spoiler Bild]"
+            },
+            "oeffnungsmechanismus": {
+              "schritt_1": "Sammle 3 sternenförmige NFC-Tags.",
+              "schritt_2": "Scanne diese mit deinem Smartphone.",
+              "schritt_3": "Das Scannen öffnet eine Webseite mit dem Code zum Tresor."
+            },
+            "was_ist_nfc": "NFC (Near Field Communication) ist eine Kurzstreckenkommunikationstechnologie, die es ermöglicht, Geräte in der Nähe voneinander zu verbinden. Aktivierung: Android - Gehe in die Einstellungen, wähle 'Verbindung' oder 'NFC', schalte NFC ein. iOS - Gehe in die Wallet-App, aktiviere die Option für NFC-Scans.",
+            "wie_scannen": "Halte dein Smartphone nah an das NFC-Tag und warte auf eine Bestätigung auf dem Display.",
+            "oeffnen_des_schlosses": "Drehsequenz: Rechts, Links, Rechts. Sei dabei sehr genau!",
+            "schließen_des_schlosses": "Drücke einfach die Klappe wieder zu. Falls sie schräg sitzt, öffne sie erneut und passe die Position an.",
+            "alternative_problemlösung": "Falls etwas nicht funktioniert, wiederhole die oben genannten Schritte sorgfältig."
+          },
+          "kamera_cache_2": {
+            "position": {
+              "hoehe": "1.5m",
+              "spoiler_bild": "[Spoiler Bild]"
+            },
+            "stromversorgung": "Verbinde das Lieferkabel mit einer Powerbank. Falls keine Powerbank verfügbar, nutze Adapter für dein Smartphone im Cache.",
+            "wlan_verbindung": "Verbinde dein Smartphone mit dem Netzwerk 'Geocache Kamera'. Kein Passwort erforderlich.",
+            "anmelden_im_netzwerk": "Falls die Verbindung nicht automatisch hergestellt wird, schalte mobile Daten aus und öffne die Webseite: 192.168.4.1.",
+            "selfie_aufnehmen": "Mache ein Foto von dir selbst oder deiner Hand.",
+            "code_erhalten": "Nach dem Fotoerstellen erhältst du den Code.",
+            "andenken_speichern": "Lade das heruntergeladene Foto auf dein Profil hoch und behalte es als Erinnerung."
+          },
+          "tetris_cache_3": {
+            "position": {
+              "hoehe": "1.5m",
+              "spoiler_bild": "[Spoiler Bild]"
+            },
+            "stromversorgung": "Schließe deine Powerbank oder dein Smartphone mit dem beiliegenden Adapter an, um das Gerät zu aktivieren.",
+            "spielsteuerung": {
+              "knopf_oben": "Bewegt den Block nach links",
+              "knopf_mitte": "Bewegt den Block nach rechts",
+              "knopf_unten": "Dreht den Block"
+            },
+            "was_ist_tetris": "Tetris ist ein klassisches Puzzlespiel, bei dem verschiedene Formen (Tetrominos) nach unten fallen. Ziel ist es, vollständige horizontale Linien zu bilden, die dann verschwinden.",
+            "ziel": "Du musst 4 vollständige Linien abschließen, um den Code freizuschalten.",
+            "code_erhalten": "Nachdem 4 Linien erfolgreich abgeschlossen wurden, wird ein numerischer Code angezeigt.",
+            "schloss_oeffnen": "Gib den erhaltenen Code auf dem Zahlenschloss des Caches ein, um ihn zu öffnen."
+          },
+          "qr_cache_4": {
+            "position": {
+              "hoehe": "1.5m",
+              "spoiler_bild": "[Spoiler Bild]"
+            },
+            "wo_ist_der_cache": "Der QR Cache ist in etwa 1,5 m Höhe an einem stabilen Mast oder Baum angebracht. Achte auf ein wetterfestes Etikett mit sichtbarem QR-Code.",
+            "wie_scannen": "Öffne die Kamera-App oder eine QR-Scanner-App auf deinem Smartphone. Richte die Kamera ruhig und senkrecht auf den QR-Code. Stelle sicher, dass genügend Licht vorhanden ist, damit der Code erkannt wird.",
+            "wie_entschluesseln": "Der gescannte Text ist in Base64 kodiert. Verwende eine Kryptographie-App oder besuche https://www.multisolver.de, wähle 'Base64 decode' und entschlüssele den Code. Der resultierende Text ist der Zahlencode für das Schloss.",
+            "schloss_oeffnen": "Gib den nach der Base64-Decodierung erhaltenen Code (meist Zahlen) auf dem digitalen Zahlenschloss des Caches ein. Drücke 'OK' oder 'Enter', um das Schloss zu öffnen. Achte darauf, keine Leerzeichen oder zusätzlichen Zeichen einzugeben.",
+            "fehlerbehebung": "Falls der Code nicht funktioniert: Überprüfe die Decodierung, stelle sicher, dass du den vollen QR-Code gescannt hast und keine falschen Zeichen enthalten sind. Wiederhole den Scan gegebenenfalls unter besserer Beleuchtung."
+          }
+        }
+      `
+    }
+];
+    // Funktion zur Formatierung der Ausgabe
+function formatForHtml(text) {
+    // Zuerst: Variable deklarieren
+    let formattedText = text.replace(/###\s+(.+?)(?=\n|$)/g, '<h2>$1</h2>');
+    formattedText = formattedText.replace(/\n/g, '<br>');
+
+    // Dann: Übrige Ersetzungen
+    
+    formattedText = formattedText.replace(/(\d+)\.\s(.+)/g, '<ol><li>$2</li></ol>');
+    formattedText = formattedText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    formattedText = formattedText.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank">$1</a>');
+
+    return formattedText;
+}
+
+    // Nachricht zum Chat hinzufügen
+    function addMessage(role, content) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message');
+        messageDiv.classList.add(role === 'user' ? 'user-message' : 'bot-message');
+
+        // Wenn die Nachricht vom Bot kommt, formatiere sie
+        if (role === 'assistant') {
+            content = formatForHtml(content);
+            messageDiv.innerHTML = content; // Verwende innerHTML für HTML-Inhalte
+        } else {
+            messageDiv.textContent = content; // Für Benutzer-Nachrichten nutze plain Text
+        }
+
+        chatBox.insertBefore(messageDiv, typingIndicator);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        // Zum Chat-Verlauf hinzufügen
+        chatHistory.push({ role: role, content: content });
+    }
+
+    // Nachricht an den Proxy-Server senden
+    async function sendToProxy(message) {
+        typingIndicator.style.display = 'block';
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        try {
+            const response = await fetch("https://lennarthuhn-github-io.vercel.app/api/mistral-proxy", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    messages: chatHistory,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.choices && data.choices.length > 0) {
+                const botResponse = data.choices[0].message.content.trim();
+                addMessage('assistant', botResponse);
+            } else {
+                addMessage('assistant', "Entschuldigung, ich konnte keine Antwort generieren.");
+            }
+        } catch (error) {
+            console.error('Fehler bei der API-Anfrage:', error);
+            addMessage('assistant', "Es gab einen Fehler bei der Verbindung zur Mistral API.");
+        } finally {
+            typingIndicator.style.display = 'none';
+        }
+    }
+
+    // Event-Listener für Senden-Button
+    sendButton.addEventListener('click', function () {
+        const message = userInput.value.trim();
+        if (message) {
+            addMessage('user', message);
+            userInput.value = '';
+            sendToProxy(message);
+        }
+    });
+
+    // Event-Listener für Enter-Taste
+    userInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            sendButton.click();
+        }
+    });
+
+    // Begrüßungsnachricht
+    addMessage('assistant', 'Hallo! Wie kann ich Ihnen helfen?');
+});
+</script>
+
+</body>
+</html>
