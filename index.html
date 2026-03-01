@@ -1,107 +1,140 @@
 <!DOCTYPE html>
-<html lang="de">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>404 – Nicht gefunden</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Roboto:wght@300&display=swap');
-
-    body {
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-      color: #fff;
-      font-family: 'Roboto', sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      text-align: center;
-      overflow: hidden;
-    }
-
-    .container {
-      max-width: 800px;
-      padding: 2rem;
-      animation: fadeIn 1.2s ease-out;
-    }
-
-    h1 {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 120px;
-      font-weight: 700;
-      margin: 0;
-      text-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-      letter-spacing: -2px;
-    }
-
-    p {
-      font-size: 1.2rem;
-      margin: 1.5rem 0;
-      line-height: 1.6;
-    }
-
-    .emoji {
-      font-size: 2rem;
-      margin: 0 0.3rem;
-    }
-
-    a {
-      color: #fff;
-      text-decoration: none;
-      border: 2px solid #fff;
-      padding: 0.8rem 1.8rem;
-      border-radius: 30px;
-      font-weight: bold;
-      font-size: 1rem;
-      transition: all 0.3s ease;
-      display: inline-block;
-      margin-top: 1rem;
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    a:hover {
-      background: rgba(255, 255, 255, 0.3);
-      transform: translateY(-3px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .glitch {
-      position: relative;
-      animation: glitch 2s infinite;
-    }
-
-    @keyframes glitch {
-      0% { transform: translate(0); }
-      2% { transform: translate(-2px, 2px); }
-      4% { transform: translate(0); }
-      6% { transform: translate(2px, -2px); }
-      8% { transform: translate(0); }
-      100% { transform: translate(0); }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .footer {
-      margin-top: 3rem;
-      font-size: 0.9rem;
-      opacity: 0.7;
-    }
-  </style>
+    <title>Pose Landmarker - Wink Log</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/pose/pose.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <style>
+        body { font-family: sans-serif; margin: 0; background: #000; color: #fff; overflow: hidden; }
+        .container { position: relative; width: 100vw; height: 100vh; display: flex; justify-content: center; align-items: center; }
+        #webcam { position: absolute; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        #output_canvas { position: absolute; width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
+        #status { position: absolute; top: 20px; left: 20px; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 8px; }
+        .wave-alert { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 3rem; color: #0f0; font-weight: bold; display: none; text-shadow: 0 0 10px #000; }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1 class="glitch">Hello World🤣</h1>
-
-    
-    
-    <div class="footer">
-      oder was hast du hier sonst erwartet?
+    <div class="container">
+        <video id="webcam" autoplay playsinline></video>
+        <canvas id="output_canvas"></canvas>
+        <div id="status">Warten auf Kamera...</div>
+        <div id="wave-alert" class="wave-alert">👋 WINKEN ERKANNT!</div>
     </div>
-  </div>
+
+    <script>
+        const videoElement = document.getElementById('webcam');
+        const canvasElement = document.getElementById('output_canvas');
+        const canvasCtx = canvasElement.getContext('2d');
+        const statusElement = document.getElementById('status');
+        const alertElement = document.getElementById('wave-alert');
+
+        let lastWaveTime = 0;
+        const waveHistory = [];
+        const MAX_HISTORY = 10;
+
+        function onResults(results) {
+            canvasCtx.save();
+            canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+            
+            if (results.poseLandmarks) {
+                drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {color: '#00FF00', lineWidth: 4});
+                drawLandmarks(canvasCtx, results.poseLandmarks, {color: '#FF0000', lineWidth: 2});
+                
+                detectWave(results.poseLandmarks);
+            }
+            canvasCtx.restore();
+        }
+
+        const pose = new Pose({
+            locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`
+        });
+
+        pose.setOptions({
+            modelComplexity: 1,
+            smoothLandmarks: true,
+            minDetectionConfidence: 0.5,
+            minTrackingConfidence: 0.5
+        });
+
+        pose.onResults(onResults);
+
+        const camera = new Camera(videoElement, {
+            onFrame: async () => {
+                canvasElement.width = videoElement.videoWidth;
+                canvasElement.height = videoElement.videoHeight;
+                await pose.send({image: videoElement});
+            },
+            width: 1280,
+            height: 720
+        });
+
+        camera.start().then(() => {
+            statusElement.innerText = "Aktiv: Wink zum Loggen";
+        });
+
+        function detectWave(landmarks) {
+            const nose = landmarks[0];
+            const leftWrist = landmarks[15];
+            const rightWrist = landmarks[16];
+            
+            if (!nose || (!leftWrist && !rightWrist)) return;
+
+            const wrist = (leftWrist && (!rightWrist || leftWrist.y < rightWrist.y)) ? leftWrist : rightWrist;
+            
+            // Hand über Kopf
+            if (wrist.y < nose.y) {
+                waveHistory.push(wrist.x);
+                if (waveHistory.length > MAX_HISTORY) waveHistory.shift();
+                
+                if (waveHistory.length === MAX_HISTORY) {
+                    let movement = 0;
+                    for(let i=1; i<waveHistory.length; i++) {
+                        movement += Math.abs(waveHistory[i] - waveHistory[i-1]);
+                    }
+                    
+                    const now = Date.now();
+                    if (movement > 0.1 && now - lastWaveTime > 10000) {
+                        lastWaveTime = now;
+                        triggerLog();
+                    }
+                }
+            } else {
+                waveHistory.length = 0;
+            }
+        }
+
+        async function triggerLog() {
+            alertElement.style.display = 'block';
+            setTimeout(() => alertElement.style.display = 'none', 3000);
+            
+            statusElement.innerText = "Logge...";
+            
+            // Capture image
+            const captureCanvas = document.createElement('canvas');
+            captureCanvas.width = videoElement.videoWidth;
+            captureCanvas.height = videoElement.videoHeight;
+            const ctx = captureCanvas.getContext('2d');
+            ctx.scale(-1, 1);
+            ctx.drawImage(videoElement, -captureCanvas.width, 0);
+            const image = captureCanvas.toDataURL('image/jpeg', 0.8);
+
+            try {
+                const response = await fetch('/api/log', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ image })
+                });
+                const result = await response.json();
+                statusElement.innerText = result.success ? "Erfolgreich geloggt!" : "Fehler beim Loggen";
+            } catch (e) {
+                statusElement.innerText = "Netzwerkfehler";
+            }
+            
+            setTimeout(() => statusElement.innerText = "Aktiv: Wink zum Loggen", 5000);
+        }
+    </script>
 </body>
 </html>
