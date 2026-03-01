@@ -122,17 +122,29 @@
             const image = captureCanvas.toDataURL('image/jpeg', 0.8);
 
             try {
-                // HINWEIS: Ersetze diese URL durch deine tatsächliche Vercel-Deployment-URL
-                const vercelUrl = 'https://dein-projekt.vercel.app/api/log'; 
+                // Versuche zuerst den lokalen API-Endpunkt (falls auf Vercel gehostet)
+                // Sonst nutze die Vercel-URL (muss von dir konfiguriert werden)
+                const vercelUrl = window.location.hostname.includes('vercel.app') 
+                    ? '/api/log' 
+                    : 'https://lennart-pose-log.vercel.app/api/log'; // Ersetze dies durch deine URL!
+
                 const response = await fetch(vercelUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ image })
                 });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    statusElement.innerText = "Fehler: " + (errorData.details || response.statusText);
+                    return;
+                }
+
                 const result = await response.json();
                 statusElement.innerText = result.success ? "Erfolgreich geloggt!" : "Fehler beim Loggen";
             } catch (e) {
-                statusElement.innerText = "Netzwerkfehler";
+                statusElement.innerText = "Netzwerkfehler: Bitte Vercel-URL prüfen";
+                console.error(e);
             }
             
             setTimeout(() => statusElement.innerText = "Aktiv: Wink zum Loggen", 5000);
