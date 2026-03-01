@@ -46,29 +46,37 @@ module.exports = async (req, res) => {
       cache_code: cacheCode,
       logtype: 'Comment',
       comment: '👋 Automatisch geloggt via Pose Web App (Wink-Detektion)',
-      comment_format: 'plaintext'
+      comment_format: 'plaintext',
+      oauth_version: '1.0'
     },
   };
 
   const token = { key: userToken, secret: userSecret };
 
   try {
-    // Combine OAuth parameters and data into the body, exactly like the Android App
+    // Calculate signature including body data
     const oauthData = oauth.authorize(request_data, token);
+    
+    // Combine all parameters into the body, matching Android logic
     const fullBody = { ...request_data.data, ...oauthData };
+    
+    console.log('Submitting log for', cacheCode);
     
     const logResponse = await axios({
       url: request_data.url,
-      method: request_data.method,
+      method: 'POST',
       data: new URLSearchParams(fullBody).toString(),
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded'
-      }
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'User-Agent': 'OpenClaw-Pose-WebApp/1.0'
+      },
+      timeout: 10000
     });
 
     const logUuid = logResponse.data.log_uuid;
+    console.log('Log submitted, UUID:', logUuid);
 
-    // Optional: Image upload if image is provided (matches Android behavior)
+    // Image upload (matches Android behavior)
     if (logUuid && req.body.image) {
       const base64Image = req.body.image.replace(/^data:image\/jpeg;base64,/, "");
       const image_request = {
@@ -78,26 +86,35 @@ module.exports = async (req, res) => {
           log_uuid: logUuid,
           caption: 'Pose Web App Overlay',
           image: base64Image,
-          is_spoiler: 'false'
+          is_spoiler: 'false',
+          oauth_version: '1.0'
         }
       };
+      
       const imageOauth = oauth.authorize(image_request, token);
+      const imageBody = { ...image_request.data, ...imageOauth };
+      
+      console.log('Uploading image...');
       await axios({
         url: image_request.url,
         method: 'POST',
-        data: new URLSearchParams({ ...image_request.data, ...imageOauth }).toString(),
+        data: new URLSearchParams(imageBody).toString(),
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'OpenClaw-Pose-WebApp/1.0'
+        },
+        timeout: 15000
       });
+      console.log('Image uploaded successfully');
     }
 
-    res.status(200).json({ success: true, result: logResponse.data });
+    res.status(200).json({ success: true, log_uuid: logUuid });
   } catch (error) {
-    console.error('OKAPI Error:', error.response?.data || error.message);
+    const errorDetails = error.response?.data || error.message;
+    console.error('OKAPI Error:', JSON.stringify(errorDetails));
     res.status(500).json({ 
       error: 'Failed to log to OpenCaching', 
-      details: error.response?.data?.error?.message || error.message 
+      details: errorDetails
     });
   }
 };
