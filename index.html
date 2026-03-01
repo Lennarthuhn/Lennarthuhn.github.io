@@ -136,7 +136,8 @@
                 
                 if (!response.ok) {
                     const errorData = await response.json();
-                    statusElement.innerText = "Fehler: " + (errorData.details || response.statusText);
+                    statusElement.innerText = "Fehler: " + (errorData.details || errorData.error || response.statusText);
+                    console.error("API Error:", errorData);
                     return;
                 }
 
