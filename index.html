@@ -112,13 +112,29 @@
             
             statusElement.innerText = "Logge...";
             
-            // Capture image
+            // Capture image with Overlay
             const captureCanvas = document.createElement('canvas');
             captureCanvas.width = videoElement.videoWidth;
             captureCanvas.height = videoElement.videoHeight;
             const ctx = captureCanvas.getContext('2d');
+            
+            // 1. Draw mirrored video
+            ctx.save();
             ctx.scale(-1, 1);
             ctx.drawImage(videoElement, -captureCanvas.width, 0);
+            ctx.restore();
+
+            // 2. Draw the skeleton from output_canvas
+            // Note: output_canvas matches video size and is already aligned
+            ctx.drawImage(canvasElement, 0, 0);
+
+            // 3. Add Watermark
+            ctx.fillStyle = "white";
+            ctx.font = "bold 30px sans-serif";
+            ctx.shadowColor = "black";
+            ctx.shadowBlur = 7;
+            ctx.fillText("👋 Logged via Pose Web App", 30, captureCanvas.height - 40);
+
             const image = captureCanvas.toDataURL('image/jpeg', 0.8);
 
             try {
