@@ -122,7 +122,9 @@
             const image = captureCanvas.toDataURL('image/jpeg', 0.8);
 
             try {
-                const response = await fetch('/api/log', {
+                // HINWEIS: Ersetze diese URL durch deine tatsächliche Vercel-Deployment-URL
+                const vercelUrl = 'https://dein-projekt.vercel.app/api/log'; 
+                const response = await fetch(vercelUrl, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ image })
