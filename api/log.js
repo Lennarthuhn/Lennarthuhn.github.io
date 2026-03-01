@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
   const consumerSecret = process.env.OC_CONSUMER_SECRET;
   const userToken = process.env.OC_TOKEN;
   const userSecret = process.env.OC_SECRET;
-  const cacheCode = process.env.OC_CACHE_CODE || 'OC18915';
+  const cacheCode = process.env.OC_CACHE_CODE || 'OC18AA4';
 
   if (!consumerKey || !consumerSecret || !userToken || !userSecret) {
     return res.status(500).json({ error: 'Server configuration missing: OC secrets' });
