@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
     method: 'POST',
     data: {
       cache_code: cacheCode,
-      logtype: 'Found it',
+      logtype: 'Comment',
       comment: '👋 Automatisch geloggt via Pose Web App (Wink-Detektion)',
       comment_format: 'plaintext'
     },
@@ -53,17 +53,46 @@ module.exports = async (req, res) => {
   const token = { key: userToken, secret: userSecret };
 
   try {
-    const response = await axios({
+    // Combine OAuth parameters and data into the body, exactly like the Android App
+    const oauthData = oauth.authorize(request_data, token);
+    const fullBody = { ...request_data.data, ...oauthData };
+    
+    const logResponse = await axios({
       url: request_data.url,
       method: request_data.method,
-      params: oauth.authorize(request_data, token),
-      data: new URLSearchParams(request_data.data).toString(),
+      data: new URLSearchParams(fullBody).toString(),
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
     });
 
-    res.status(200).json({ success: true, result: response.data });
+    const logUuid = logResponse.data.log_uuid;
+
+    // Optional: Image upload if image is provided (matches Android behavior)
+    if (logUuid && req.body.image) {
+      const base64Image = req.body.image.replace(/^data:image\/jpeg;base64,/, "");
+      const image_request = {
+        url: 'https://www.opencaching.de/okapi/services/logs/images/add',
+        method: 'POST',
+        data: {
+          log_uuid: logUuid,
+          caption: 'Pose Web App Overlay',
+          image: base64Image,
+          is_spoiler: 'false'
+        }
+      };
+      const imageOauth = oauth.authorize(image_request, token);
+      await axios({
+        url: image_request.url,
+        method: 'POST',
+        data: new URLSearchParams({ ...image_request.data, ...imageOauth }).toString(),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      });
+    }
+
+    res.status(200).json({ success: true, result: logResponse.data });
   } catch (error) {
     console.error('OKAPI Error:', error.response?.data || error.message);
     res.status(500).json({ 
