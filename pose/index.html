@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pose Bluetooth Streamer</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; color: #e0e0e0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .card { background: #1e1e1e; padding: 25px; border-radius: 12px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); max-width: 600px; width: 100%; text-align: center; }
+        h1 { color: #00e676; margin-top: 0; }
+        button { background: #00e676; color: #000; border: none; padding: 12px 24px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; margin: 10px; }
+        button:hover { background: #00c853; transform: translateY(-2px); }
+        button:disabled { background: #555; cursor: not-allowed; transform: none; }
+        #status { margin: 15px 0; font-size: 0.9em; color: #aaa; }
+        #stream-container { width: 100%; aspect-ratio: 4/3; background: #000; margin-top: 20px; border-radius: 8px; overflow: hidden; position: relative; border: 2px solid #333; }
+        #stream-image { width: 100%; height: 100%; object-fit: contain; }
+        .log { text-align: left; font-family: monospace; font-size: 11px; background: #000; padding: 10px; height: 100px; overflow-y: auto; margin-top: 20px; border-radius: 4px; color: #00ff00; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🕺 Pose BT Stream</h1>
+        <p>Verbinde dich via Bluetooth LE, um das Kamerabild inklusive Pose-Overlay in Echtzeit zu sehen.</p>
+        
+        <div id="status">Bereit zum Verbinden</div>
+        
+        <button id="connectBtn">GERÄT KOPPELN</button>
+        <button id="disconnectBtn" disabled>TRENNEN</button>
+
+        <div id="stream-container">
+            <img id="stream-image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Warte auf Stream...">
+        </div>
+
+        <div class="log" id="log">--- System Log ---</div>
+    </div>
+
+    <script>
+        const connectBtn = document.getElementById('connectBtn');
+        const disconnectBtn = document.getElementById('disconnectBtn');
+        const statusEl = document.getElementById('status');
+        const logEl = document.getElementById('log');
+        const imgEl = document.getElementById('stream-image');
+
+        // BLE UUIDs (müssen mit Android-App übereinstimmen)
+        const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
+        const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a8";
+
+        let bleDevice = null;
+        let bleCharacteristic = null;
+        let frameBuffer = new Uint8Array(0);
+
+        function log(msg) {
+            const time = new Date().toLocaleTimeString();
+            logEl.innerHTML += `<div>[${time}] ${msg}</div>`;
+            logEl.scrollTop = logEl.scrollHeight;
+        }
+
+        connectBtn.addEventListener('click', async () => {
+            try {
+                log("Suche nach Pose-Geräten...");
+                bleDevice = await navigator.bluetooth.requestDevice({
+                    filters: [{ namePrefix: 'PoseStream' }],
+                    optionalServices: [SERVICE_UUID]
+                });
+
+                log(`Gefunden: ${bleDevice.name}`);
+                const server = await bleDevice.gatt.connect();
+                const service = await server.getPrimaryService(SERVICE_UUID);
+                bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+
+                await bleCharacteristic.startNotifications();
+                bleCharacteristic.addEventListener('characteristicvaluechanged', handleFrameChunk);
+
+                statusEl.innerText = "Verbunden: " + bleDevice.name;
+                statusEl.style.color = "#00e676";
+                connectBtn.disabled = true;
+                disconnectBtn.disabled = false;
+                log("Bluetooth Stream aktiv.");
+            } catch (error) {
+                log("Fehler: " + error);
+            }
+        });
+
+        function handleFrameChunk(event) {
+            const value = new Uint8Array(event.target.value.buffer);
+            
+            // Markierung für Frame-Ende (z.B. 0xFF 0xD9 für JPEG EOI oder benutzerdefiniertes Flag)
+            // Hier nutzen wir eine einfache Buffer-Konkatenierung
+            if (value.length === 1 && value[0] === 0x00) { // Beispielflag für "Start New Frame"
+                if (frameBuffer.length > 0) {
+                    const blob = new Blob([frameBuffer], { type: 'image/jpeg' });
+                    imgEl.src = URL.createObjectURL(blob);
+                }
+                frameBuffer = new Uint8Array(0);
+            } else {
+                let newBuffer = new Uint8Array(frameBuffer.length + value.length);
+                newBuffer.set(frameBuffer);
+                newBuffer.set(value, frameBuffer.length);
+                frameBuffer = newBuffer;
+            }
+        }
+
+        disconnectBtn.addEventListener('click', () => {
+            if (bleDevice && bleDevice.gatt.connected) {
+                bleDevice.gatt.disconnect();
+                statusEl.innerText = "Getrennt";
+                statusEl.style.color = "#aaa";
+                connectBtn.disabled = false;
+                disconnectBtn.disabled = true;
+                log("Verbindung getrennt.");
+            }
+        });
+    </script>
+</body>
+</html>
