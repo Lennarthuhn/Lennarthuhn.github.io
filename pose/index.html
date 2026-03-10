@@ -58,12 +58,16 @@
         connectBtn.addEventListener('click', async () => {
             try {
                 log("Suche nach Pose-Geräten...");
+                // Filter by name and service to be sure
                 bleDevice = await navigator.bluetooth.requestDevice({
-                    filters: [{ namePrefix: 'PoseStream' }],
+                    filters: [
+                        { namePrefix: 'Pose' },
+                        { services: [SERVICE_UUID] }
+                    ],
                     optionalServices: [SERVICE_UUID]
                 });
 
-                log(`Gefunden: ${bleDevice.name}`);
+                log(`Gefunden: ${bleDevice.name || bleDevice.id}`);
                 const server = await bleDevice.gatt.connect();
                 const service = await server.getPrimaryService(SERVICE_UUID);
                 bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
@@ -84,10 +88,9 @@
         function handleFrameChunk(event) {
             const value = new Uint8Array(event.target.value.buffer);
             
-            // Markierung für Frame-Ende (z.B. 0xFF 0xD9 für JPEG EOI oder benutzerdefiniertes Flag)
-            // Hier nutzen wir eine einfache Buffer-Konkatenierung
-            if (value.length === 1 && value[0] === 0x00) { // Beispielflag für "Start New Frame"
-                if (frameBuffer.length > 0) {
+            // Start of frame magic: 0x01, 0x02, 0x03
+            if (value.length === 3 && value[0] === 0x01 && value[1] === 0x02 && value[2] === 0x03) {
+                if (frameBuffer.length > 100) { // Valid JPEG?
                     const blob = new Blob([frameBuffer], { type: 'image/jpeg' });
                     imgEl.src = URL.createObjectURL(blob);
                 }
