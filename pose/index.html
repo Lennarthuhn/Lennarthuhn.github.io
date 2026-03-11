@@ -57,14 +57,16 @@
 
         connectBtn.addEventListener('click', async () => {
             try {
-                log("Suche nach Geräten...");
-                // Remove service filter to see everything
+                log("Öffne Bluetooth-Auswahl...");
+                // Simplified request for maximum compatibility
                 bleDevice = await navigator.bluetooth.requestDevice({
-                    acceptAllDevices: true,
+                    filters: [
+                        { services: [SERVICE_UUID] }
+                    ],
                     optionalServices: [SERVICE_UUID]
                 });
 
-                log(`Gefunden: ${bleDevice.name || bleDevice.id}`);
+                log(`Gefunden: ${bleDevice.name || "Unbekanntes Gerät"}`);
                 const server = await bleDevice.gatt.connect();
                 const service = await server.getPrimaryService(SERVICE_UUID);
                 bleCharacteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
