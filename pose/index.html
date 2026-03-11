@@ -57,13 +57,10 @@
 
         connectBtn.addEventListener('click', async () => {
             try {
-                log("Suche nach Pose-Geräten...");
-                // Filter by name and service to be sure
+                log("Suche nach Geräten...");
+                // Remove service filter to see everything
                 bleDevice = await navigator.bluetooth.requestDevice({
-                    filters: [
-                        { namePrefix: 'Pose' },
-                        { services: [SERVICE_UUID] }
-                    ],
+                    acceptAllDevices: true,
                     optionalServices: [SERVICE_UUID]
                 });
 
