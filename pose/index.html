@@ -57,12 +57,9 @@
 
         connectBtn.addEventListener('click', async () => {
             try {
-                log("Öffne Bluetooth-Auswahl...");
-                // Simplified request for maximum compatibility
+                log("Suche nach allen Geräten...");
                 bleDevice = await navigator.bluetooth.requestDevice({
-                    filters: [
-                        { services: [SERVICE_UUID] }
-                    ],
+                    acceptAllDevices: true,
                     optionalServices: [SERVICE_UUID]
                 });
 
