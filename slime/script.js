@@ -4,7 +4,10 @@
  */
 
 const canvas = document.getElementById('canvas');
-const gl = canvas.getContext('webgl2');
+const gl = canvas.getContext('webgl2', { alpha: true, depth: false, stencil: false, antialias: false });
+gl.getExtension('EXT_color_buffer_float');
+gl.getExtension('OES_texture_float_linear');
+gl.getExtension('OES_texture_half_float_linear'); gl.getExtension('EXT_color_buffer_float');
 
 if (!gl) {
     alert('WebGL 2.0 wird von deinem Browser nicht unterstützt.');
@@ -274,6 +277,12 @@ function createFBO(w, h, internalFormat, format, type, filter) {
     gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, texture, 0);
 
+    const status = gl.checkFramebufferStatus(gl.FRAMEBUFFER);
+    if (status !== gl.FRAMEBUFFER_COMPLETE) {
+        console.warn('Framebuffer incomplete, falling back to RGBA8');
+        return createFBO(w, h, gl.RGBA8, gl.RGBA, gl.UNSIGNED_BYTE, filter);
+    }
+
     return {
         texture,
         fbo,
@@ -308,7 +317,7 @@ let density, velocity, pressure, divergence, curl;
 function initFramebuffers() {
     const simRes = config.SIM_RESOLUTION;
     const dyeRes = config.DYE_RESOLUTION;
-    const texType = gl.HALF_FLOAT || gl.FLOAT;
+    const texType = gl.HALF_FLOAT;
 
     density = createDoubleFBO(dyeRes, dyeRes, gl.RGBA16F, gl.RGBA, texType, gl.LINEAR);
     velocity = createDoubleFBO(simRes, simRes, gl.RG16F, gl.RG, texType, gl.LINEAR);
