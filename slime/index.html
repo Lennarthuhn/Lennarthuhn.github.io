@@ -1,62 +1,52 @@
 <!DOCTYPE html>
-<html lang='de'>
+<html>
 <head>
-    <meta charset='UTF-8'>
-    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-    <title>DIAGNOSE ASMR Slime</title>
     <style>
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: orange !important; }
-        canvas { display: block; width: 100vw; height: 100vh; background: pink !important; border: 10px solid blue !important; }
-        #log { position: absolute; top: 10px; left: 10px; color: white; background: rgba(0,0,0,0.7); padding: 10px; font-family: monospace; z-index: 1000; pointer-events: none; }
+        body { background: orange; margin: 0; color: white; font-family: sans-serif; }
+        canvas { display: block; width: 100vw; height: 100vh; background: pink; }
+        #status { position: absolute; top: 0; left: 0; background: rgba(0,0,0,0.8); padding: 20px; z-index: 100; }
     </style>
 </head>
 <body>
-    <div id='log'>Warte auf Skript-Start...</div>
+    <div id='status'>
+        <h2>Diagnose v1.7</h2>
+        <div id='log'>Warte auf Skript...</div>
+    </div>
     <canvas id='canvas'></canvas>
     <script>
-        const canvas = document.getElementById('canvas');
-        const l = document.getElementById('log');
-        const log = (m) => { console.log(m); l.innerText += '\n' + m; };
-
-        try {
-            log('Initialisiere WebGL2...');
-            const gl = canvas.getContext('webgl2', { alpha: false });
-            if (!gl) {
-                log('FEHLER: WebGL2 nicht verfügbar.');
-                document.body.style.background = 'red';
-            } else {
-                log('WebGL2 OK. Größe: ' + window.innerWidth + 'x' + window.innerHeight);
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-
-                const vs = gl.createShader(gl.VERTEX_SHADER);
-                gl.shaderSource(vs, '#version 300 es\nin vec2 p; void main(){ gl_Position=vec4(p,0,1); }');
-                gl.compileShader(vs);
-                
-                const fs = gl.createShader(gl.FRAGMENT_SHADER);
-                gl.shaderSource(fs, '#version 300 es\nprecision highp float; out vec4 o; void main(){ o=vec4(0,1,0,1); }'); // GRÜN
-                gl.compileShader(fs);
-                
-                const prog = gl.createProgram(); gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog);
-                
-                const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-                gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 3,-1, -1,3]), gl.STATIC_DRAW);
-                
-                function render() {
-                    gl.viewport(0, 0, canvas.width, canvas.height);
-                    gl.clearColor(1, 0, 1, 1); // MAGENTA
-                    gl.clear(gl.COLOR_BUFFER_BIT);
-                    gl.useProgram(prog);
-                    gl.drawArrays(gl.TRIANGLES, 0, 3);
-                    requestAnimationFrame(render);
-                }
-                requestAnimationFrame(render);
-                log('Render-Loop läuft. Du solltest GRÜN sehen.');
+        const log = (m) => { document.getElementById('log').innerHTML += '<br>' + m; console.log(m); };
+        window.onload = () => {
+            log('Skript geladen.');
+            const canvas = document.getElementById('canvas');
+            
+            // Test 1: 2D Context
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                log('2D Context OK.');
+                ctx.fillStyle = 'blue';
+                ctx.fillRect(10, 10, 100, 100);
+                ctx.fillStyle = 'white';
+                ctx.font = '30px Arial';
+                ctx.fillText('JS & 2D OK', 20, 50);
             }
-        } catch (e) {
-            log('CRASH: ' + e.message);
-            document.body.style.background = 'black';
-        }
+
+            // Test 2: WebGL
+            log('Suche WebGL...');
+            const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+            if (!gl) {
+                log('<b style="color:red">FEHLER: Kein WebGL verfügbar!</b>');
+                return;
+            }
+            log('WebGL OK: ' + gl.getParameter(gl.VERSION));
+            
+            try {
+                gl.clearColor(0, 1, 0, 1); // GRÜN
+                gl.clear(gl.COLOR_BUFFER_BIT);
+                log('<b style="color:green">ERFOLG: WebGL hat GRÜN gezeichnet!</b>');
+            } catch(e) {
+                log('FEHLER beim Zeichnen: ' + e.message);
+            }
+        };
     </script>
 </body>
 </html>
