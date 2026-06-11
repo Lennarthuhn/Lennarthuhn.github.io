@@ -1,52 +1,98 @@
 <!DOCTYPE html>
-<html>
+<html lang='de'>
 <head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'>
+    <title>ASMR Slime 2D</title>
     <style>
-        body { background: orange; margin: 0; color: white; font-family: sans-serif; }
-        canvas { display: block; width: 100vw; height: 100vh; background: pink; }
-        #status { position: absolute; top: 0; left: 0; background: rgba(0,0,0,0.8); padding: 20px; z-index: 100; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background: #050505; color: white; font-family: sans-serif; }
+        canvas { display: block; width: 100vw; height: 100vh; touch-action: none; cursor: crosshair; }
+        #ui { position: absolute; top: 20px; left: 20px; pointer-events: none; }
+        h1 { font-weight: 300; letter-spacing: 2px; opacity: 0.8; margin: 0; font-size: 1.5rem; }
+        p { font-size: 0.8rem; opacity: 0.5; }
+        .controls { margin-top: 15px; display: flex; gap: 10px; pointer-events: auto; }
+        button { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 8px 15px; border-radius: 4px; cursor: pointer; backdrop-filter: blur(5px); }
     </style>
 </head>
 <body>
-    <div id='status'>
-        <h2>Diagnose v1.7</h2>
-        <div id='log'>Warte auf Skript...</div>
+    <div id='ui'>
+        <h1>ASMR Slime (2D)</h1>
+        <p>Bewege die Maus oder berühre den Bildschirm</p>
+        <div class='controls'>
+            <button onclick='clearCanvas()'>Leeren</button>
+            <button onclick='randomSplats()'>Mehr Schleim</button>
+        </div>
     </div>
     <canvas id='canvas'></canvas>
     <script>
-        const log = (m) => { document.getElementById('log').innerHTML += '<br>' + m; console.log(m); };
-        window.onload = () => {
-            log('Skript geladen.');
-            const canvas = document.getElementById('canvas');
-            
-            // Test 1: 2D Context
-            const ctx = canvas.getContext('2d');
-            if (ctx) {
-                log('2D Context OK.');
-                ctx.fillStyle = 'blue';
-                ctx.fillRect(10, 10, 100, 100);
-                ctx.fillStyle = 'white';
-                ctx.font = '30px Arial';
-                ctx.fillText('JS & 2D OK', 20, 50);
-            }
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height, particles = [];
 
-            // Test 2: WebGL
-            log('Suche WebGL...');
-            const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
-            if (!gl) {
-                log('<b style="color:red">FEHLER: Kein WebGL verfügbar!</b>');
-                return;
+        function resize() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x; this.y = y;
+                this.vx = (Math.random() - 0.5) * 5;
+                this.vy = (Math.random() - 0.5) * 5;
+                this.size = Math.random() * 25 + 15;
+                this.life = 1.0;
+                this.color = color;
             }
-            log('WebGL OK: ' + gl.getParameter(gl.VERSION));
-            
-            try {
-                gl.clearColor(0, 1, 0, 1); // GRÜN
-                gl.clear(gl.COLOR_BUFFER_BIT);
-                log('<b style="color:green">ERFOLG: WebGL hat GRÜN gezeichnet!</b>');
-            } catch(e) {
-                log('FEHLER beim Zeichnen: ' + e.message);
+            update() {
+                this.x += this.vx; this.y += this.vy;
+                this.vx *= 0.95; this.vy *= 0.95;
+                this.life -= 0.008;
             }
-        };
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size * this.life, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(' + this.color.r + ',' + this.color.g + ',' + this.color.b + ',' + (this.life * 0.6) + ')';
+                ctx.fill();
+            }
+        }
+
+        function createSplat(x, y, count = 15) {
+            const colors = [
+                {r:0, g:255, b:100}, {r:255, g:0, b:150}, {r:0, g:150, b:255}, {r:255, g:200, b:0}
+            ];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            for(let i=0; i<count; i++) particles.push(new Particle(x, y, color));
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(5, 5, 5, 0.15)';
+            ctx.fillRect(0, 0, width, height);
+            for(let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if(particles[i].life <= 0) particles.splice(i, 1);
+            }
+            requestAnimationFrame(animate);
+        }
+
+        canvas.addEventListener('mousemove', (e) => { if(e.buttons > 0) createSplat(e.clientX, e.clientY, 2); });
+        canvas.addEventListener('mousedown', (e) => createSplat(e.clientX, e.clientY, 15));
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            for(let t of e.touches) createSplat(t.clientX, t.clientY, 8);
+        }, {passive: false});
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            for(let t of e.touches) createSplat(t.clientX, t.clientY, 2);
+        }, {passive: false});
+
+        window.clearCanvas = () => { particles = []; ctx.clearRect(0,0,width,height); };
+        window.randomSplats = () => { for(let i=0; i<8; i++) createSplat(Math.random()*width, Math.random()*height, 10); };
+
+        randomSplats();
+        animate();
     </script>
 </body>
 </html>
