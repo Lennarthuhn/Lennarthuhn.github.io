@@ -60,7 +60,9 @@
             gl.compileShader(f);
             if (!gl.getShaderParameter(f, gl.COMPILE_STATUS)) log('FS Error ('+name+'): ' + gl.getShaderInfoLog(f));
             const p = gl.createProgram();
-            gl.attachShader(p, v); gl.attachShader(p, f); gl.linkProgram(p);
+            gl.attachShader(p, v);
+            gl.attachShader(p, f);
+            gl.linkProgram(p);
             if (!gl.getProgramParameter(p, gl.LINK_STATUS)) log('Link Error ('+name+'): ' + gl.getProgramInfoLog(p));
             return p;
         }
